@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Get a Quote – GMAS</title><link rel="stylesheet" href="css/style.css"/></head>
+<body>
+<nav class="navbar dark-nav" id="mainNav"><div class="container nav-inner">
+  <a href="index.html" class="nav-logo"><div class="logo-icon">G</div><div class="logo-text"><span class="logo-name">GMAS</span><span class="logo-tag">Management & Accounting</span></div></a>
+  <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="services.html">Services</a></li><li><a href="training.html">Training</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li><li><a href="enquiry.html" class="nav-cta active">Get a Quote</a></li></ul>
+  <button id="navToggle"><span></span><span></span><span></span></button><div id="navOverlay"></div>
+</div></nav>
+
+<div class="page-cover">
+  <div class="cover-bg" id="coverBg"></div>
+  <div class="cover-overlay" id="coverOverlay"></div>
+  <div class="container cover-inner" style="padding:7rem 0 3.5rem;">
+    <div class="cover-tag">📋 Free Consultation</div>
+    <h1 class="cover-title">Get a Free Quote</h1>
+    <p class="cover-desc">Fill out the form below and our team will contact you within 24 hours with a customized service proposal — no obligations.</p>
+    <div class="cover-breadcrumb"><a href="index.html">Home</a><span>›</span><span class="current">Get a Quote</span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container apply-grid">
+    <div class="apply-sidebar">
+      <div class="apply-info-card">
+        <h3 style="font-family:'Outfit',sans-serif;font-weight:800;color:var(--dark);margin-bottom:1.2rem;">What Happens Next?</h3>
+        <div class="apply-step"><div class="apply-step-num">1</div><div class="apply-step-text"><strong>Submit your form</strong> — takes just 2 minutes.</div></div>
+        <div class="apply-step"><div class="apply-step-num">2</div><div class="apply-step-text"><strong>We review your needs</strong> and prepare a customized proposal.</div></div>
+        <div class="apply-step"><div class="apply-step-num">3</div><div class="apply-step-text"><strong>Free consultation call</strong> — 30 minutes with our expert.</div></div>
+        <div class="apply-step"><div class="apply-step-num">4</div><div class="apply-step-text"><strong>Proposal sent</strong> with clear pricing and scope.</div></div>
+        <div class="apply-step"><div class="apply-step-num">5</div><div class="apply-step-text"><strong>Get started!</strong> We begin work immediately after agreement.</div></div>
+        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+          <div style="font-size:0.75rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.8rem;">Contact Direct</div>
+          <a href="tel:9714506775" style="display:flex;align-items:center;gap:0.6rem;color:var(--sky-dark);font-weight:700;font-size:0.88rem;text-decoration:none;margin-bottom:0.5rem;">📞 +977-14506775</a>
+          <a href="tel:15971817" style="display:flex;align-items:center;gap:0.6rem;color:var(--sky-dark);font-weight:700;font-size:0.88rem;text-decoration:none;margin-bottom:0.5rem;">📱 15971817</a>
+          <a href="https://wa.me/9779714506775" target="_blank" style="display:flex;align-items:center;gap:0.6rem;color:#25D366;font-weight:700;font-size:0.88rem;text-decoration:none;">💬 WhatsApp Us</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="form-card">
+        <div id="formSuccess" class="form-success" style="display:none;">✅ Enquiry submitted! We'll contact you within 24 hours. Thank you for choosing GMAS.</div>
+        <div class="form-section-title">Personal Information</div>
+        <div class="form-row">
+          <div class="form-group"><label>Full Name *</label><input type="text" id="eName" placeholder="Your full name" /></div>
+          <div class="form-group"><label>Phone / WhatsApp *</label><input type="tel" id="ePhone" placeholder="+977-XXXXXXXXX" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email Address</label><input type="email" id="eEmail" placeholder="your@email.com" /></div>
+          <div class="form-group"><label>City / District</label><input type="text" id="eCity" placeholder="e.g. Jhapa, Biratnagar..." /></div>
+        </div>
+        <div class="form-section-title">Business / Service Details</div>
+        <div class="form-group"><label>What type of entity are you?</label>
+          <select id="eEntityType"><option value="">Select...</option><option>Individual / Freelancer</option><option>Sole Trader / Shop</option><option>Private Limited Company</option><option>Partnership Firm</option><option>NGO / INGO</option><option>Cooperative</option><option>Student (Training Enquiry)</option><option>Other</option></select>
+        </div>
+        <div class="form-group"><label>Which service(s) are you interested in? *</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.5rem;" id="serviceCheckboxes">
+            <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:500;cursor:pointer;"><input type="checkbox" value="Bookkeeping & Accounting" style="width:auto" />Bookkeeping & Accounting</label>
+            <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:500;cursor:pointer;"><input type="checkbox" value="Auditing" style="width:auto" />Auditing</label>
+            <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:500;cursor:pointer;"><input type="checkbox" value="Tax & VAT Compliance" style="width:auto" />Tax & VAT Compliance</label>
+            <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:500;cursor:pointer;"><input type="checkbox" value="Business Consulting" style="width:auto" />Business Consulting</label>
+            <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:500;cursor:pointer;"><input type="checkbox" value="Accounting Training" style="width:auto" />Accounting Training</label>
+            <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:500;cursor:pointer;"><input type="checkbox" value="Software Training" style="width:auto" />Software Training (Tally/QB)</label>
+            <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:500;cursor:pointer;"><input type="checkbox" value="Company Registration" style="width:auto" />Company Registration</label>
+            <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:500;cursor:pointer;"><input type="checkbox" value="Other" style="width:auto" />Other</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Budget Range</label><select id="eBudget"><option value="">Select...</option><option>Under NPR 3,000/month</option><option>NPR 3,000–8,000/month</option><option>NPR 8,000–20,000/month</option><option>Above NPR 20,000/month</option><option>One-time project</option><option>Training only</option></select></div>
+          <div class="form-group"><label>When to start?</label><select id="eTimeline"><option value="">Select...</option><option>Immediately</option><option>Within 1 month</option><option>1–3 months</option><option>Just exploring</option></select></div>
+        </div>
+        <div class="form-group"><label>Tell us more about your needs</label><textarea id="eMessage" placeholder="Describe your business, current challenges, or what you're looking for..."></textarea></div>
+        <div class="form-group"><label>How did you hear about us?</label><select id="eSource"><option value="">Select...</option><option>Google Search</option><option>Facebook</option><option>Friend / Referral</option><option>Walk-in</option><option>Other</option></select></div>
+        <button class="form-submit" onclick="submitEnquiry()">📋 Submit Enquiry</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><span class="footer-copy">© 2025 GMAS – Global Management and Accounting Solutions. All rights reserved.</span></div></div></footer>
+
+<script>
+buildPageCover('enquiry');initNavScroll(false);
+function submitEnquiry(){const n=document.getElementById('eName').value,p=document.getElementById('ePhone').value;if(!n||!p){alert('Please fill in Name and Phone.');return;}const services=[...document.querySelectorAll('#serviceCheckboxes input:checked')].map(c=>c.value);const entry={type:'enquiry',id:'ENQ'+Date.now(),name:n,phone:p,email:document.getElementById('eEmail').value,city:document.getElementById('eCity').value,entityType:document.getElementById('eEntityType').value,services,budget:document.getElementById('eBudget').value,timeline:document.getElementById('eTimeline').value,message:document.getElementById('eMessage').value,source:document.getElementById('eSource').value,status:'New',date:new Date().toISOString()};const subs=JSON.parse(localStorage.getItem('gmas_submissions')||'[]');subs.push(entry);localStorage.setItem('gmas_submissions',JSON.stringify(subs));document.getElementById('formSuccess').style.display='block';document.querySelector('.form-card').querySelectorAll('input,select,textarea').forEach(e=>{if(e.type==='checkbox')e.checked=false;else e.value='';});window.scrollTo({top:0,behavior:'smooth'});}
+</script>
+<script>
+function getCfg(){return JSON.parse(localStorage.getItem('gmas_config')||'{}');}
+function applyConfig(){var cfg=getCfg();if(cfg.colorSky)document.documentElement.style.setProperty('--sky',cfg.colorSky);if(cfg.colorRed)document.documentElement.style.setProperty('--red',cfg.colorRed);if(cfg.siteName)document.querySelectorAll('.logo-name').forEach(function(e){e.textContent=cfg.siteName;});if(cfg.siteTagline)document.querySelectorAll('.logo-tag').forEach(function(e){e.textContent=cfg.siteTagline;});if(cfg.footerDesc)document.querySelectorAll('.footer-brand-desc').forEach(function(e){e.textContent=cfg.footerDesc;});if(cfg.logoBase64){document.querySelectorAll('.logo-icon').forEach(function(el){el.innerHTML='<img src="'+cfg.logoBase64+'" style="width:32px;height:32px;object-fit:contain;position:relative;z-index:2;" />';});}}
+applyConfig();
+function buildPageCover(key){var cfg=getCfg();var covers=cfg.pageCovers||JSON.parse(localStorage.getItem('gmas_page_covers')||'{}');var cover=covers[key];var bgEl=document.getElementById('coverBg');var overlayEl=document.getElementById('coverOverlay');if(!bgEl||!overlayEl)return;var defaults={services:{bg:'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=80',overlay:'rgba(10,20,40,0.78)'},training:{bg:'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1600&q=80',overlay:'rgba(5,15,30,0.76)'},about:{bg:'https://images.unsplash.com/photo-1560472355-536de3962603?w=1600&q=80',overlay:'rgba(8,18,38,0.78)'},contact:{bg:'https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1600&q=80',overlay:'rgba(10,20,40,0.76)'},enquiry:{bg:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&q=80',overlay:'rgba(5,15,30,0.78)'}};var d=(cover&&cover.bg)?cover:(defaults[key]||{bg:'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80',overlay:'rgba(10,20,40,0.78)'});bgEl.style.backgroundImage="url('"+d.bg+"')";overlayEl.style.background=d.overlay;}
+var toggle=document.getElementById('navToggle'),links=document.getElementById('navLinks'),overlay=document.getElementById('navOverlay');function closeNav(){links.style.cssText='';overlay.classList.remove('active');toggle.classList.remove('open');}toggle.addEventListener('click',function(){var o=links.style.display==='flex';if(o){closeNav();}else{links.style.cssText='display:flex;position:fixed;top:0;right:0;bottom:0;width:290px;flex-direction:column;background:#0C1A2E;padding:100px 1.5rem 2rem;z-index:1099;box-shadow:-4px 0 40px rgba(0,0,0,0.6);list-style:none;gap:0.3rem;';overlay.classList.add('active');toggle.classList.add('open');}});overlay.addEventListener('click',closeNav);
+document.querySelectorAll('.faq-q').forEach(function(q){q.addEventListener('click',function(){var item=q.parentElement;var was=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open');});if(!was)item.classList.add('open');});});
+var sb=document.getElementById('statsBand');if(sb){var ob=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){document.querySelectorAll('.count-anim').forEach(function(el){if(el.dataset.animated)return;el.dataset.animated='1';var t=parseInt(el.dataset.target);if(!t)return;var s=0,st=t/(2000/16),iv=setInterval(function(){s+=st;if(s>=t){el.textContent=t.toLocaleString();clearInterval(iv);}else{el.textContent=Math.floor(s).toLocaleString();}},16);});ob.disconnect();}});},{threshold:0.3});ob.observe(sb);}
+</script>
+<script>buildPageCover("enquiry");</script>
+</body></html>

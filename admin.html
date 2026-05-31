@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GMAS Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#0EA5E9;--sky-dark:#0284C7;--red:#E11D48;--dark:#0C1A2E;--dark2:#112240;--green:#10B981;--yellow:#F59E0B;--white:#fff;--bg:#F0F7FF;--bg2:#E8F4FD;--border:#CBD5E1;--text:#334155;--text-light:#64748B;--radius:12px;--sidebar:260px;--navh:64px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:var(--dark);z-index:9999;display:flex;align-items:center;justify-content:center;}
+.lcard{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:2.5rem;width:100%;max-width:380px;}
+.licon{width:64px;height:64px;background:linear-gradient(135deg,var(--sky),var(--sky-dark));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;color:white;margin:0 auto 1rem;font-family:'Outfit',sans-serif;position:relative;overflow:hidden;box-shadow:0 8px 25px rgba(14,165,233,0.4);}
+.licon::after{content:'';position:absolute;bottom:0;right:0;width:18px;height:18px;background:var(--red);clip-path:polygon(100% 0,100% 100%,0 100%);}
+.lcard h2{text-align:center;color:white;font-size:1.4rem;font-weight:800;margin-bottom:0.3rem;}
+.lcard p{text-align:center;color:rgba(255,255,255,0.35);font-size:0.8rem;margin-bottom:2rem;}
+.linput-group{margin-bottom:1rem;}
+.linput-group label{display:block;font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.5px;}
+.linput-group input{width:100%;padding:0.8rem 1rem;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;font-family:'Outfit',sans-serif;font-size:0.9rem;color:white;outline:none;transition:border-color 0.2s;}
+.linput-group input:focus{border-color:var(--sky);}
+.lbtn{width:100%;padding:0.85rem;background:linear-gradient(135deg,var(--sky),var(--sky-dark));color:white;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;margin-top:0.5rem;transition:all 0.2s;}
+.lbtn:hover{box-shadow:0 8px 25px rgba(14,165,233,0.4);}
+.lerror{color:var(--red);font-size:0.82rem;text-align:center;margin-top:0.5rem;display:none;}
+.lhint{text-align:center;font-size:0.72rem;color:rgba(255,255,255,0.2);margin-top:1.2rem;}
+
+/* TOP NAV */
+.topnav{position:fixed;top:0;left:0;right:0;height:var(--navh);background:var(--dark);border-bottom:1px solid rgba(255,255,255,0.07);z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;box-shadow:0 2px 20px rgba(0,0,0,0.4);}
+.tnav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.tnav-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--sky),var(--sky-dark));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;color:white;position:relative;overflow:hidden;}
+.tnav-icon::after{content:'';position:absolute;bottom:0;right:0;width:11px;height:11px;background:var(--red);clip-path:polygon(100% 0,100% 100%,0 100%);}
+.tnav-name{font-weight:800;color:var(--sky);font-size:0.98rem;}
+.tnav-sub{font-size:0.58rem;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase;}
+.tnav-right{display:flex;align-items:center;gap:0.7rem;}
+.tnav-badge{background:rgba(14,165,233,0.15);border:1px solid rgba(14,165,233,0.25);color:var(--sky);font-size:0.72rem;font-weight:700;padding:0.25rem 0.7rem;border-radius:100px;}
+.tnav-btn{padding:0.45rem 0.9rem;border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
+.tnav-btn.sky{background:linear-gradient(135deg,var(--sky),var(--sky-dark));color:white;}
+.tnav-btn.ghost{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.1);}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:var(--navh);left:0;bottom:0;width:var(--sidebar);background:white;border-right:1px solid var(--border);overflow-y:auto;z-index:100;padding:0.8rem 0;}
+.sb-section{padding:0 0.8rem;margin-top:0.8rem;}
+.sb-label{font-size:0.62rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1.5px;padding:0.3rem 0.5rem;margin-bottom:0.2rem;}
+.sb-btn{display:flex;align-items:center;gap:0.6rem;width:100%;padding:0.6rem 0.8rem;border-radius:9px;border:none;background:none;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.84rem;font-weight:600;color:var(--text-light);transition:all 0.2s;text-align:left;}
+.sb-btn:hover{background:var(--bg2);color:var(--dark);}
+.sb-btn.active{background:rgba(14,165,233,0.1);color:var(--sky-dark);border-left:3px solid var(--sky);padding-left:calc(0.8rem - 3px);}
+.sb-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;}
+.sb-count{margin-left:auto;background:var(--red);color:white;font-size:0.63rem;font-weight:800;padding:0.15rem 0.45rem;border-radius:100px;min-width:18px;text-align:center;}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);padding-top:var(--navh);min-height:100vh;}
+.main-content{padding:2rem;}
+
+/* PANELS */
+.panel{display:none;}
+.panel.active{display:block;}
+.panel-header{margin-bottom:1.8rem;}
+.panel-header h2{font-size:1.5rem;font-weight:800;color:var(--dark);margin-bottom:0.3rem;}
+.panel-header p{font-size:0.85rem;color:var(--text-light);}
+.badge-new{font-size:0.6rem;font-weight:700;background:linear-gradient(135deg,var(--sky),var(--sky-dark));color:white;padding:0.18rem 0.55rem;border-radius:100px;vertical-align:middle;margin-left:0.4rem;}
+
+/* SETTINGS SECTIONS */
+.ss{background:white;border-radius:var(--radius);padding:1.4rem;border:1px solid var(--border);margin-bottom:1.2rem;}
+.ss-title{font-weight:700;color:var(--dark);font-size:0.92rem;margin-bottom:0.25rem;}
+.ss-desc{font-size:0.78rem;color:var(--text-light);margin-bottom:1rem;}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;}
+.sg .g{display:flex;flex-direction:column;gap:0.35rem;}
+.sg .g.s2{grid-column:span 2;}
+.sg .g label{font-size:0.78rem;font-weight:600;color:var(--dark);}
+.sg .g input,.sg .g select,.sg .g textarea{padding:0.6rem 0.8rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.84rem;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.2s;width:100%;}
+.sg .g input:focus,.sg .g select:focus,.sg .g textarea:focus{border-color:var(--sky);background:white;}
+.sg .g textarea{min-height:75px;resize:vertical;}
+
+/* Save buttons */
+.save-btn{background:linear-gradient(135deg,var(--sky),var(--sky-dark));color:white;border:none;padding:0.7rem 1.6rem;border-radius:9px;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;margin-top:0.4rem;display:inline-flex;align-items:center;gap:0.4rem;}
+.save-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(14,165,233,0.35);}
+.save-btn.red{background:linear-gradient(135deg,var(--red),#BE123C);}
+.save-btn.green{background:linear-gradient(135deg,var(--green),#059669);}
+.save-btn.dark{background:linear-gradient(135deg,var(--dark),#1e293b);}
+.add-btn{background:var(--bg2);border:1.5px dashed var(--border);color:var(--text-light);width:100%;padding:0.75rem;border-radius:9px;font-family:'Outfit',sans-serif;font-weight:600;font-size:0.83rem;cursor:pointer;margin-top:0.5rem;transition:all 0.2s;}
+.add-btn:hover{border-color:var(--sky);color:var(--sky-dark);}
+
+/* Card editor */
+.ec{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.7rem;position:relative;}
+.ec-header{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem;}
+.ec-num{width:24px;height:24px;background:var(--sky);border-radius:50%;color:white;font-weight:800;font-size:0.72rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ec-title{font-weight:700;font-size:0.85rem;color:var(--dark);flex:1;}
+.rm-btn{background:rgba(225,29,72,0.1);color:var(--red);border:none;border-radius:6px;padding:0.28rem 0.6rem;font-size:0.72rem;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:700;}
+
+/* Ticker row */
+.tr{display:flex;align-items:center;gap:0.6rem;padding:0.5rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;margin-bottom:0.4rem;}
+.tr input{border:none;background:none;font-family:'Outfit',sans-serif;font-size:0.84rem;color:var(--text);outline:none;flex:1;}
+.tr .icon-in{max-width:52px;text-align:center;}
+.tr .del-btn{background:rgba(225,29,72,0.1);color:var(--red);border:none;border-radius:5px;padding:0.2rem 0.5rem;font-size:0.75rem;cursor:pointer;}
+
+/* Toggle */
+.trow{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--bg2);}
+.trow:last-child{border-bottom:none;}
+.trow-label{font-weight:600;font-size:0.85rem;color:var(--dark);}
+.trow-desc{font-size:0.75rem;color:var(--text-light);margin-top:0.1rem;}
+.toggle{width:44px;height:24px;border-radius:100px;border:none;cursor:pointer;position:relative;transition:background 0.2s;background:#CBD5E1;flex-shrink:0;}
+.toggle.on{background:var(--sky);}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle.on::after{transform:translateX(20px);}
+
+/* Color row */
+.cr{display:flex;align-items:center;gap:1rem;padding:0.6rem 0;border-bottom:1px solid var(--bg2);}
+.cr:last-child{border-bottom:none;}
+.cr label{font-size:0.82rem;font-weight:600;color:var(--text);flex:1;}
+.cr input[type=color]{width:40px;height:34px;border-radius:6px;border:1.5px solid var(--border);padding:2px;cursor:pointer;}
+.cr input[type=text]{max-width:105px;padding:0.45rem 0.6rem;border:1.5px solid var(--border);border-radius:7px;font-family:'Outfit',sans-serif;font-size:0.82rem;}
+
+/* Logo upload */
+.logo-drop{border:2px dashed var(--border);border-radius:10px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;background:var(--bg);}
+.logo-drop:hover{border-color:var(--sky);background:var(--bg2);}
+.logo-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.logo-preview{min-height:80px;border:1.5px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--bg);}
+
+/* Sub-tabs */
+.stabs{display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.stab{background:var(--bg2);border:1px solid var(--border);color:var(--text-light);padding:0.45rem 0.9rem;border-radius:7px;font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.stab.active{background:var(--sky);color:white;border-color:var(--sky);}
+.stabp{display:none;}
+.stabp.active{display:block;}
+
+/* Data table */
+.table-wrap{background:white;border-radius:var(--radius);border:1px solid var(--border);overflow:auto;}
+table.dt{width:100%;border-collapse:collapse;font-size:0.82rem;}
+table.dt th{background:var(--bg2);color:var(--text-light);font-weight:700;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;padding:0.75rem 1rem;text-align:left;white-space:nowrap;}
+table.dt td{padding:0.8rem 1rem;border-bottom:1px solid var(--bg2);color:var(--text);}
+table.dt tr:hover td{background:var(--bg);}
+table.dt tr:last-child td{border-bottom:none;}
+
+/* Stat cards */
+.stat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+.sc{background:white;border-radius:var(--radius);padding:1.2rem;border:1px solid var(--border);}
+.sc-num{font-size:1.8rem;font-weight:900;color:var(--sky);}
+.sc-lbl{font-size:0.73rem;color:var(--text-light);margin-top:0.1rem;font-weight:600;}
+
+/* Action btns */
+.abtn{background:none;border:1px solid var(--border);color:var(--text-light);padding:0.28rem 0.65rem;border-radius:5px;font-size:0.73rem;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;transition:all 0.2s;}
+.abtn:hover{background:var(--bg2);}
+.abtn.sky{border-color:var(--sky);color:var(--sky);}
+.abtn.red{border-color:var(--red);color:var(--red);}
+.abtn.green{border-color:var(--green);color:var(--green);}
+
+/* Badges */
+.badge{display:inline-block;padding:0.18rem 0.65rem;border-radius:100px;font-size:0.68rem;font-weight:700;}
+.badge-new{background:rgba(14,165,233,0.1);color:var(--sky-dark);}
+.badge-review{background:rgba(245,158,11,0.1);color:#B45309;}
+.badge-done{background:rgba(16,185,129,0.1);color:#059669;}
+.badge-enquiry{background:rgba(14,165,233,0.1);color:var(--sky-dark);}
+.badge-contact{background:rgba(139,92,246,0.1);color:#7C3AED;}
+
+/* Search */
+.search-row{display:flex;align-items:center;gap:0.5rem;background:white;border:1.5px solid var(--border);border-radius:9px;padding:0.45rem 0.9rem;margin-bottom:1rem;}
+.search-row input{border:none;background:none;font-family:'Outfit',sans-serif;font-size:0.85rem;color:var(--text);outline:none;flex:1;}
+
+/* Quick actions */
+.qa{display:flex;gap:0.7rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.qa-btn{display:inline-flex;align-items:center;gap:0.45rem;padding:0.55rem 1.1rem;border-radius:9px;font-weight:700;font-size:0.8rem;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;color:white;}
+.qa-btn:hover{transform:translateY(-1px);}
+
+/* Toast */
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--dark);color:white;padding:0.75rem 1.3rem;border-radius:11px;font-weight:600;font-size:0.85rem;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,0.3);transform:translateY(100px);opacity:0;transition:all 0.3s;display:flex;align-items:center;gap:0.5rem;}
+#toast.show{transform:translateY(0);opacity:1;}
+
+/* Empty */
+.empty{text-align:center;padding:3rem;color:var(--text-light);}
+.empty-icon{font-size:2.5rem;margin-bottom:0.8rem;}
+
+/* Nav link row */
+.nl-row{display:flex;align-items:center;gap:0.5rem;padding:0.6rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;margin-bottom:0.4rem;flex-wrap:wrap;}
+.nl-row input{border:none;background:white;padding:0.35rem 0.6rem;border-radius:6px;border:1px solid var(--border);font-family:'Outfit',sans-serif;font-size:0.82rem;flex:1;min-width:80px;}
+.nl-row label{font-size:0.78rem;font-weight:600;color:var(--text);display:flex;align-items:center;gap:4px;cursor:pointer;}
+
+@media(max-width:900px){.stat-cards{grid-template-columns:repeat(2,1fr);}  .main{margin-left:0;} .sidebar{display:none;}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="lcard">
+    <div class="licon">G</div>
+    <h2>GMAS Admin</h2>
+    <p>Enter credentials to access the control panel</p>
+    <div class="linput-group"><label>Username</label><input type="text" id="loginUser" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="linput-group"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="lbtn" onclick="doLogin()">Login to Admin →</button>
+    <div class="lerror" id="loginError">❌ Invalid username or password</div>
+    <div class="lhint">Default: admin / gmas2024</div>
+  </div>
+</div>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a href="#" class="tnav-logo">
+    <div class="tnav-icon">G</div>
+    <div><div class="tnav-name">GMAS</div><div class="tnav-sub">Admin Panel</div></div>
+  </a>
+  <div class="tnav-right">
+    <span class="tnav-badge">🔒 Logged In</span>
+    <a href="index.html" target="_blank" class="tnav-btn sky">🌐 View Site</a>
+    <button class="tnav-btn ghost" onclick="doLogout()">Logout</button>
+  </div>
+</nav>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-section">
+    <div class="sb-label">Dashboard</div>
+    <button class="sb-btn active" onclick="showPanel('dashboard',this)"><div class="sb-icon">📊</div>Overview</button>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Leads & Enquiries</div>
+    <button class="sb-btn" onclick="showPanel('submissions',this)"><div class="sb-icon">📋</div>All Enquiries<span class="sb-count" id="sbEnqCount">0</span></button>
+    <button class="sb-btn" onclick="showPanel('contacts',this)"><div class="sb-icon">✉️</div>Contact Messages<span class="sb-count" id="sbConCount">0</span></button>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Home Page</div>
+    <button class="sb-btn" onclick="showPanel('slides',this)"><div class="sb-icon">🖼️</div>Hero Slides</button>
+    <button class="sb-btn" onclick="showPanel('offer',this)"><div class="sb-icon">🎁</div>Offer Card</button>
+    <button class="sb-btn" onclick="showPanel('ticker',this)"><div class="sb-icon">📢</div>Ticker Bar</button>
+    <button class="sb-btn" onclick="showPanel('stats',this)"><div class="sb-icon">📈</div>Stats Band</button>
+    <button class="sb-btn" onclick="showPanel('hometext',this)"><div class="sb-icon">✏️</div>Section Text</button>
+    <button class="sb-btn" onclick="showPanel('testimonials',this)"><div class="sb-icon">💬</div>Testimonials</button>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Services & Training</div>
+    <button class="sb-btn" onclick="showPanel('services',this)"><div class="sb-icon">🛠️</div>Services & Pricing</button>
+    <button class="sb-btn" onclick="showPanel('training',this)"><div class="sb-icon">📚</div>Training Courses</button>
+    <button class="sb-btn" onclick="showPanel('faq',this)"><div class="sb-icon">❓</div>FAQ</button>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Site Design</div>
+    <button class="sb-btn" onclick="showPanel('brand',this)"><div class="sb-icon">🎨</div>Brand & Logo</button>
+    <button class="sb-btn" onclick="showPanel('navbar',this)"><div class="sb-icon">🔗</div>Navigation Menu</button>
+    <button class="sb-btn" onclick="showPanel('pagecovers',this)"><div class="sb-icon">🌄</div>Page Covers</button>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">About & Contact</div>
+    <button class="sb-btn" onclick="showPanel('about',this)"><div class="sb-icon">🏢</div>About Us</button>
+    <button class="sb-btn" onclick="showPanel('contactinfo',this)"><div class="sb-icon">📍</div>Contact Info</button>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Settings</div>
+    <button class="sb-btn" onclick="showPanel('security',this)"><div class="sb-icon">🔐</div>Admin Password</button>
+    <button class="sb-btn" onclick="showPanel('data',this)"><div class="sb-icon">💾</div>Data Export</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main"><div class="main-content">
+
+<!-- DASHBOARD -->
+<div class="panel active" id="panel-dashboard">
+  <div class="panel-header"><h2>Dashboard 📊</h2><p>GMAS website overview and recent activity.</p></div>
+  <div class="stat-cards">
+    <div class="sc"><div class="sc-num" id="ds-enq">0</div><div class="sc-lbl">Total Enquiries</div></div>
+    <div class="sc"><div class="sc-num" id="ds-new" style="color:var(--red)">0</div><div class="sc-lbl">New (Unread)</div></div>
+    <div class="sc"><div class="sc-num" id="ds-con">0</div><div class="sc-lbl">Contact Messages</div></div>
+    <div class="sc"><div class="sc-num" id="ds-month">0</div><div class="sc-lbl">This Month</div></div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Quick Actions</div>
+    <div class="qa" style="margin-top:0.8rem;">
+      <button class="qa-btn" style="background:linear-gradient(135deg,var(--sky),var(--sky-dark));" onclick="showPanel('slides',qb('slides'))">🖼️ Edit Hero Slides</button>
+      <button class="qa-btn" style="background:linear-gradient(135deg,var(--red),#BE123C);" onclick="showPanel('offer',qb('offer'))">🎁 Offer Card</button>
+      <button class="qa-btn" style="background:linear-gradient(135deg,var(--green),#059669);" onclick="showPanel('submissions',qb('submissions'))">📋 View Enquiries</button>
+      <button class="qa-btn" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9);" onclick="showPanel('brand',qb('brand'))">🎨 Brand & Logo</button>
+      <button class="qa-btn" style="background:linear-gradient(135deg,#F59E0B,#D97706);" onclick="showPanel('training',qb('training'))">📚 Training Courses</button>
+    </div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Recent Enquiries</div>
+    <div id="dashRecent" style="margin-top:0.8rem;"><div class="empty"><div class="empty-icon">📋</div><p>No enquiries yet.</p></div></div>
+  </div>
+</div>
+
+<!-- SUBMISSIONS / ENQUIRIES -->
+<div class="panel" id="panel-submissions">
+  <div class="panel-header"><h2>Enquiries <span class="badge-new">LIVE DATA</span></h2><p>All enquiries submitted through the website form.</p></div>
+  <div class="stabs">
+    <button class="stab active" onclick="switchSub(this,'enq-all')">All</button>
+    <button class="stab" onclick="switchSub(this,'enq-new')">New</button>
+    <button class="stab" onclick="switchSub(this,'enq-review')">In Review</button>
+    <button class="stab" onclick="switchSub(this,'enq-done')">Completed</button>
+  </div>
+  <div class="search-row"><span>🔍</span><input type="text" id="enqSearch" placeholder="Search by name, phone, service..." oninput="filterEnq(this.value)"/></div>
+  <div class="stabp active" id="stabp-enq-all"><div class="table-wrap"><table class="dt"><thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Services</th><th>Entity</th><th>Budget</th><th>Status</th><th>Actions</th></tr></thead><tbody id="enqAll"></tbody></table></div></div>
+  <div class="stabp" id="stabp-enq-new"><div class="table-wrap"><table class="dt"><thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Services</th><th>Status</th><th>Actions</th></tr></thead><tbody id="enqNew"></tbody></table></div></div>
+  <div class="stabp" id="stabp-enq-review"><div class="table-wrap"><table class="dt"><thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Services</th><th>Status</th><th>Actions</th></tr></thead><tbody id="enqReview"></tbody></table></div></div>
+  <div class="stabp" id="stabp-enq-done"><div class="table-wrap"><table class="dt"><thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Services</th><th>Status</th><th>Actions</th></tr></thead><tbody id="enqDone"></tbody></table></div></div>
+</div>
+
+<!-- CONTACT MESSAGES -->
+<div class="panel" id="panel-contacts">
+  <div class="panel-header"><h2>Contact Messages ✉️</h2><p>Messages from the Contact page form.</p></div>
+  <div class="table-wrap"><table class="dt"><thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Subject</th><th>Message</th><th>Actions</th></tr></thead><tbody id="conTable"></tbody></table></div>
+</div>
+
+<!-- HERO SLIDES -->
+<div class="panel" id="panel-slides">
+  <div class="panel-header"><h2>Hero Slides <span class="badge-new">FULL CONTROL</span></h2><p>Add, edit, remove, and reorder fullscreen slideshow slides. Each slide has image, title, description, badge, buttons, and overlay.</p></div>
+  <div class="ss">
+    <div class="ss-title">Slideshow Slides</div>
+    <div class="ss-desc">Each slide auto-plays every 5.5 seconds. Use Unsplash image URLs for backgrounds. Title supports HTML — wrap words in &lt;span class="hero-highlight"&gt;word&lt;/span&gt; for sky blue color.</div>
+    <div id="slidesEditor"></div>
+    <button class="add-btn" onclick="addSlide()">+ Add New Slide</button>
+  </div>
+  <button class="save-btn" onclick="saveSlides()">💾 Save All Slides</button>
+</div>
+
+<!-- OFFER CARD -->
+<div class="panel" id="panel-offer">
+  <div class="panel-header"><h2>Offer Card 🎁 <span class="badge-new">FULL CONTROL</span></h2><p>Floating promotional offer card shown on the home page. Can be toggled on/off.</p></div>
+  <div class="ss">
+    <div class="ss-title">Offer Card Visibility</div>
+    <div class="trow"><div><div class="trow-label">Show Offer Card</div><div class="trow-desc">Display the floating offer popup on the home page</div></div><button class="toggle" id="toggle-offerShow" onclick="this.classList.toggle('on')"></button></div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Offer Details</div>
+    <div class="sg">
+      <div class="g"><label>Header Label</label><input type="text" id="offer-headerLabel" placeholder="LIMITED OFFER"/></div>
+      <div class="g"><label>Old Price (strikethrough)</label><input type="text" id="offer-oldPrice" placeholder="NPR 1,50,000"/></div>
+      <div class="g"><label>New Offer Price</label><input type="text" id="offer-newPrice" placeholder="NPR 1,40,000"/></div>
+      <div class="g"><label>Save Amount Label</label><input type="text" id="offer-saveAmt" placeholder="NPR 10,000"/></div>
+      <div class="g"><label>CTA Button Text</label><input type="text" id="offer-ctaText" placeholder="Claim This Offer"/></div>
+      <div class="g"><label>CTA Button Link</label><input type="text" id="offer-ctaLink" placeholder="enquiry.html"/></div>
+      <div class="g s2"><label>Offer End Date (for countdown timer)</label><input type="date" id="offer-endDate"/></div>
+    </div>
+  </div>
+  <button class="save-btn" onclick="saveOffer()">💾 Save Offer Card</button>
+</div>
+
+<!-- TICKER -->
+<div class="panel" id="panel-ticker">
+  <div class="panel-header"><h2>Ticker Bar 📢 <span class="badge-new">FULL CONTROL</span></h2><p>The scrolling announcement bar below the hero slider. Add, edit, or remove items.</p></div>
+  <div class="ss">
+    <div class="trow"><div><div class="trow-label">Show Ticker Bar</div><div class="trow-desc">Display the scrolling ticker below the hero</div></div><button class="toggle on" id="toggle-tickerShow" onclick="this.classList.toggle('on')"></button></div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Ticker Items</div>
+    <div class="ss-desc">Each item shows as: [icon] Text. Duplicated automatically for seamless loop.</div>
+    <div id="tickerEditor"></div>
+    <button class="add-btn" onclick="addTickerItem()">+ Add Ticker Item</button>
+  </div>
+  <button class="save-btn" onclick="saveTicker()">💾 Save Ticker</button>
+</div>
+
+<!-- STATS BAND -->
+<div class="panel" id="panel-stats">
+  <div class="panel-header"><h2>Stats Band 📈 <span class="badge-new">FULL CONTROL</span></h2><p>The dark statistics strip below the ticker. Shows key numbers about GMAS.</p></div>
+  <div class="ss">
+    <div class="trow"><div><div class="trow-label">Show Stats Band</div><div class="trow-desc">Display the statistics strip</div></div><button class="toggle on" id="toggle-statsShow" onclick="this.classList.toggle('on')"></button></div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Stat Items</div>
+    <div id="statsEditor"></div>
+    <button class="add-btn" onclick="addStat()">+ Add Stat</button>
+  </div>
+  <button class="save-btn" onclick="saveStats()">💾 Save Stats</button>
+</div>
+
+<!-- HOME SECTION TEXT -->
+<div class="panel" id="panel-hometext">
+  <div class="panel-header"><h2>Home Section Text ✏️</h2><p>Edit all text blocks on the home page — hero, why us, process, CTA.</p></div>
+  <div class="ss">
+    <div class="ss-title">Hero Section</div>
+    <div class="sg">
+      <div class="g s2"><label>Hero Badge Text</label><input type="text" id="h-badge" placeholder="Trusted Accounting & Management Firm"/></div>
+      <div class="g s2"><label>Hero Description</label><textarea id="h-desc" placeholder="Training · Consulting · Outsourcing..."></textarea></div>
+      <div class="g"><label>Button 1 Text</label><input type="text" id="h-btn1" placeholder="Get Free Consultation"/></div>
+      <div class="g"><label>Button 2 Text</label><input type="text" id="h-btn2" placeholder="Explore Services →"/></div>
+    </div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Why GMAS Section</div>
+    <div class="sg">
+      <div class="g s2"><label>Section Title</label><input type="text" id="h-whyTitle" placeholder="Your Trusted Financial Partner in Jhapa"/></div>
+      <div class="g s2"><label>Section Description</label><textarea id="h-whyDesc"></textarea></div>
+    </div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Process Section</div>
+    <div class="sg">
+      <div class="g s2"><label>Process Section Title</label><input type="text" id="h-processTitle" placeholder="Simple 4-Step Process"/></div>
+    </div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">CTA Band (Bottom)</div>
+    <div class="sg">
+      <div class="g s2"><label>CTA Heading</label><input type="text" id="h-ctaTitle" placeholder="Ready to Grow Your Business Financially?"/></div>
+      <div class="g s2"><label>CTA Description</label><input type="text" id="h-ctaDesc" placeholder="Get a free consultation..."/></div>
+      <div class="g"><label>Button 1 Text</label><input type="text" id="h-ctaBtn1" placeholder="Get Free Consultation"/></div>
+      <div class="g"><label>Button 1 Link</label><input type="text" id="h-ctaBtn1Link" placeholder="enquiry.html"/></div>
+    </div>
+  </div>
+  <button class="save-btn" onclick="saveHomeText()">💾 Save Home Text</button>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="panel" id="panel-testimonials">
+  <div class="panel-header"><h2>Testimonials 💬 <span class="badge-new">ADD / REMOVE</span></h2><p>Manage client testimonial cards shown on the home page and about page.</p></div>
+  <div class="ss">
+    <div class="ss-title">Testimonial Cards</div>
+    <div id="testiEditor"></div>
+    <button class="add-btn" onclick="addTesti()">+ Add Testimonial</button>
+  </div>
+  <button class="save-btn" onclick="saveTestis()">💾 Save Testimonials</button>
+</div>
+
+<!-- SERVICES & PRICING -->
+<div class="panel" id="panel-services">
+  <div class="panel-header"><h2>Services & Pricing <span class="badge-new">FULL CONTROL</span></h2><p>Edit pricing plans, service cards, and service section text.</p></div>
+  <div class="stabs">
+    <button class="stab active" onclick="switchSub(this,'svc-pricing')">Pricing Plans</button>
+    <button class="stab" onclick="switchSub(this,'svc-cards')">Service Cards</button>
+    <button class="stab" onclick="switchSub(this,'svc-text')">Section Text</button>
+  </div>
+  <div class="stabp active" id="stabp-svc-pricing">
+    <div class="ss"><div class="ss-title">Pricing Plans</div><div class="ss-desc">Edit the 3 pricing cards on the Services page. Mark one as Featured to highlight it.</div><div id="pricingEditor"></div><button class="add-btn" onclick="addPricing()">+ Add Pricing Plan</button></div>
+    <button class="save-btn" onclick="savePricing()">💾 Save Pricing Plans</button>
+  </div>
+  <div class="stabp" id="stabp-svc-cards">
+    <div class="ss"><div class="ss-title">Service Cards</div><div class="ss-desc">Individual service offering cards shown on the services page and home page.</div><div id="svcCardsEditor"></div><button class="add-btn" onclick="addSvcCard()">+ Add Service Card</button></div>
+    <button class="save-btn" onclick="saveSvcCards()">💾 Save Service Cards</button>
+  </div>
+  <div class="stabp" id="stabp-svc-text">
+    <div class="ss"><div class="ss-title">Services Page Text</div>
+      <div class="sg">
+        <div class="g s2"><label>Page Main Title</label><input type="text" id="svc-mainTitle" placeholder="Our Professional Services"/></div>
+        <div class="g s2"><label>Page Description</label><textarea id="svc-mainDesc" placeholder="Complete financial services..."></textarea></div>
+        <div class="g s2"><label>Pricing Section Title</label><input type="text" id="svc-pricingTitle" placeholder="Transparent Service Packages"/></div>
+        <div class="g s2"><label>Pricing Description</label><input type="text" id="svc-pricingDesc" placeholder="Choose the plan that fits..."/></div>
+      </div>
+    </div>
+    <button class="save-btn" onclick="saveSvcText()">💾 Save Section Text</button>
+  </div>
+</div>
+
+<!-- TRAINING COURSES -->
+<div class="panel" id="panel-training">
+  <div class="panel-header"><h2>Training Courses <span class="badge-new">ADD / REMOVE</span></h2><p>Add, edit, and remove training courses shown on the Training page. Control name, duration, level, and price.</p></div>
+  <div class="ss">
+    <div class="ss-title">Course List</div>
+    <div id="coursesEditor"></div>
+    <button class="add-btn" onclick="addCourse()">+ Add Course</button>
+  </div>
+  <button class="save-btn" onclick="saveCourses()">💾 Save Courses</button>
+</div>
+
+<!-- FAQ -->
+<div class="panel" id="panel-faq">
+  <div class="panel-header"><h2>FAQ Manager ❓ <span class="badge-new">ADD / REMOVE</span></h2><p>Add, edit, and remove FAQ items shown on the Services page.</p></div>
+  <div class="ss">
+    <div class="ss-title">FAQ Items</div>
+    <div id="faqEditor"></div>
+    <button class="add-btn" onclick="addFaq()">+ Add FAQ Item</button>
+  </div>
+  <button class="save-btn" onclick="saveFaq()">💾 Save FAQ</button>
+</div>
+
+<!-- BRAND & LOGO -->
+<div class="panel" id="panel-brand">
+  <div class="panel-header"><h2>Brand & Logo 🎨 <span class="badge-new">FULL CONTROL</span></h2><p>Upload logo, set business name, tagline, and brand colors — applied site-wide instantly.</p></div>
+  <div class="ss">
+    <div class="ss-title">Logo Upload</div>
+    <div class="ss-desc">Upload your logo (PNG/JPG/SVG max 2MB) to replace the text icon. Leave empty to use the "G" text icon.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+      <div>
+        <div class="logo-drop"><input type="file" id="logoFile" accept="image/*" onchange="handleLogoUpload(this)"/><div style="font-size:1.8rem;">🖼️</div><div style="font-weight:600;color:var(--dark);margin-top:0.4rem;">Click to Upload Logo</div><div style="font-size:0.73rem;color:var(--text-light);">PNG, JPG, SVG – max 2MB</div></div>
+      </div>
+      <div>
+        <div style="font-size:0.78rem;font-weight:600;color:var(--dark);margin-bottom:0.4rem;">Logo Preview</div>
+        <div class="logo-preview" id="logoPreview"><span style="color:var(--text-light);font-size:0.78rem;">No logo uploaded</span></div>
+        <button style="margin-top:0.6rem;background:rgba(225,29,72,0.1);border:1px solid rgba(225,29,72,0.2);color:var(--red);padding:0.35rem 0.7rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-weight:600;" onclick="removeLogo()">Remove Logo</button>
+      </div>
+    </div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Brand Name & Tagline</div>
+    <div class="sg">
+      <div class="g"><label>Business Name</label><input type="text" id="cfg-siteName" placeholder="GMAS"/></div>
+      <div class="g"><label>Tagline (nav subtitle)</label><input type="text" id="cfg-siteTagline" placeholder="Management & Accounting"/></div>
+      <div class="g s2"><label>Footer Description</label><input type="text" id="cfg-footerDesc" placeholder="Your trusted financial partner in Jhapa, Nepal."/></div>
+      <div class="g"><label>Copyright Year</label><input type="text" id="cfg-copyYear" placeholder="2025"/></div>
+      <div class="g"><label>Meta Description (SEO)</label><input type="text" id="cfg-metaDesc" placeholder="GMAS – Global Management and Accounting Solutions..."/></div>
+    </div>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Brand Colors</div>
+    <div class="cr"><label>Primary Color (Sky Blue)</label><input type="color" id="cfg-sky" value="#0EA5E9" oninput="syncColor('sky',this.value)"/><input type="text" id="cfg-skyHex" value="#0EA5E9" oninput="syncColorHex('sky',this.value)"/><div id="prev-sky" style="background:#0EA5E9;color:white;padding:0.4rem 1rem;border-radius:8px;font-size:0.78rem;font-weight:700;">Primary</div></div>
+    <div class="cr"><label>Accent Color (Red)</label><input type="color" id="cfg-red" value="#E11D48" oninput="syncColor('red',this.value)"/><input type="text" id="cfg-redHex" value="#E11D48" oninput="syncColorHex('red',this.value)"/><div id="prev-red" style="background:#E11D48;color:white;padding:0.4rem 1rem;border-radius:8px;font-size:0.78rem;font-weight:700;">Accent</div></div>
+    <div class="cr"><label>Dark Background</label><input type="color" id="cfg-dark" value="#0C1A2E" oninput="syncColor('dark',this.value)"/><input type="text" id="cfg-darkHex" value="#0C1A2E" oninput="syncColorHex('dark',this.value)"/><div id="prev-dark" style="background:#0C1A2E;color:white;padding:0.4rem 1rem;border-radius:8px;font-size:0.78rem;font-weight:700;">Dark BG</div></div>
+  </div>
+  <button class="save-btn" onclick="saveBrand()">💾 Save Brand & Logo</button>
+</div>
+
+<!-- NAVIGATION MENU -->
+<div class="panel" id="panel-navbar">
+  <div class="panel-header"><h2>Navigation Menu 🔗 <span class="badge-new">FULL CONTROL</span></h2><p>Edit menu links, labels, CTA button. Add or remove menu items.</p></div>
+  <div class="ss">
+    <div class="ss-title">Menu Links</div>
+    <div class="ss-desc">Check "CTA" to make a link appear as a highlighted button (like "Get a Quote").</div>
+    <div id="navEditor"></div>
+    <button class="add-btn" onclick="addNavLink()">+ Add Menu Item</button>
+  </div>
+  <div class="ss">
+    <div class="ss-title">Navbar Colors</div>
+    <div class="sg">
+      <div class="g"><label>Background Color</label><div style="display:flex;gap:6px;"><input type="color" id="nav-bg" value="#0C1A2E"/><input type="text" id="nav-bgHex" value="#0C1A2E" style="flex:1;"/></div></div>
+      <div class="g"><label>CTA Button Color</label><div style="display:flex;gap:6px;"><input type="color" id="nav-cta" value="#E11D48"/><input type="text" id="nav-ctaHex" value="#E11D48" style="flex:1;"/></div></div>
+    </div>
+    <div class="trow" style="margin-top:0.8rem;"><div><div class="trow-label">Sticky Navbar</div><div class="trow-desc">Navbar stays fixed at top while scrolling</div></div><button class="toggle on" id="toggle-navSticky" onclick="this.classList.toggle('on')"></button></div>
+  </div>
+  <button class="save-btn" onclick="saveNav()">💾 Save Navigation</button>
+</div>
+
+<!-- PAGE COVERS -->
+<div class="panel" id="panel-pagecovers">
+  <div class="panel-header"><h2>Page Covers 🌄 <span class="badge-new">FULL CONTROL</span></h2><p>Set the background image, overlay, title, tag, and description for each inner page hero banner.</p></div>
+  <div id="pageCoversEditor"></div>
+  <button class="save-btn" onclick="savePageCovers()">💾 Save All Page Covers</button>
+</div>
+
+<!-- ABOUT US -->
+<div class="panel" id="panel-about">
+  <div class="panel-header"><h2>About Us 🏢 <span class="badge-new">FULL CONTROL</span></h2><p>Edit the About page content — story, mission, vision, team, and stats.</p></div>
+  <div class="stabs">
+    <button class="stab active" onclick="switchSub(this,'abt-story')">Story & Mission</button>
+    <button class="stab" onclick="switchSub(this,'abt-stats')">Stats</button>
+    <button class="stab" onclick="switchSub(this,'abt-team')">Team</button>
+  </div>
+  <div class="stabp active" id="stabp-abt-story">
+    <div class="ss"><div class="ss-title">Who We Are</div>
+      <div class="sg">
+        <div class="g s2"><label>Paragraph 1</label><textarea id="abt-p1" style="min-height:90px;"></textarea></div>
+        <div class="g s2"><label>Paragraph 2</label><textarea id="abt-p2" style="min-height:90px;"></textarea></div>
+        <div class="g s2"><label>Our Mission</label><textarea id="abt-mission" style="min-height:80px;"></textarea></div>
+        <div class="g s2"><label>Our Vision</label><textarea id="abt-vision" style="min-height:80px;"></textarea></div>
+      </div>
+    </div>
+    <button class="save-btn" onclick="saveAbout()">💾 Save About Text</button>
+  </div>
+  <div class="stabp" id="stabp-abt-stats">
+    <div class="ss"><div class="ss-title">Stat Numbers</div><div id="aboutStatsEditor"></div><button class="add-btn" onclick="addAboutStat()">+ Add Stat</button></div>
+    <button class="save-btn" onclick="saveAbout()">💾 Save Stats</button>
+  </div>
+  <div class="stabp" id="stabp-abt-team">
+    <div class="ss"><div class="ss-title">Team Members</div><div id="teamEditor"></div><button class="add-btn" onclick="addTeamMember()">+ Add Team Member</button></div>
+    <button class="save-btn" onclick="saveAbout()">💾 Save Team</button>
+  </div>
+</div>
+
+<!-- CONTACT INFO -->
+<div class="panel" id="panel-contactinfo">
+  <div class="panel-header"><h2>Contact Information 📍</h2><p>Update phone, address, email, hours — shown on footer, contact page, and home page.</p></div>
+  <div class="ss">
+    <div class="ss-title">Office Details</div>
+    <div class="sg">
+      <div class="g"><label>Phone Number(s)</label><input type="text" id="cfg-phone" placeholder="+977-14506775 / 15971817"/></div>
+      <div class="g"><label>WhatsApp Number (digits only)</label><input type="text" id="cfg-whatsapp" placeholder="9779714506775"/></div>
+      <div class="g"><label>Email Address</label><input type="text" id="cfg-email" placeholder="info@gmas.com.np"/></div>
+      <div class="g"><label>Website URL</label><input type="text" id="cfg-website" placeholder="https://gmas.com.np"/></div>
+      <div class="g s2"><label>Address Line 1</label><input type="text" id="cfg-addr1" placeholder="Birtamode-04, Jhapa Nepal"/></div>
+      <div class="g s2"><label>Address Line 2 (landmark)</label><input type="text" id="cfg-addr2" placeholder="Near Siddhartha Bank, Bhadrapur Road"/></div>
+      <div class="g s2"><label>Office Hours</label><input type="text" id="cfg-hours" placeholder="Mon–Fri: 9AM–6PM, Sat: 10AM–4PM"/></div>
+    </div>
+  </div>
+  <button class="save-btn" onclick="saveContactInfo()">💾 Save Contact Info</button>
+</div>
+
+<!-- SECURITY -->
+<div class="panel" id="panel-security">
+  <div class="panel-header"><h2>Admin Password 🔐</h2><p>Change your admin login credentials.</p></div>
+  <div class="ss">
+    <div class="ss-title">Change Credentials</div>
+    <div class="sg">
+      <div class="g"><label>Current Password</label><input type="password" id="cur-pass" placeholder="Current password"/></div>
+      <div class="g"><label>New Username</label><input type="text" id="new-user" placeholder="admin"/></div>
+      <div class="g"><label>New Password (min 8 chars)</label><input type="password" id="new-pass" placeholder="New password"/></div>
+      <div class="g"><label>Confirm New Password</label><input type="password" id="conf-pass" placeholder="Repeat password"/></div>
+    </div>
+    <div id="passMsg" style="display:none;margin-top:0.8rem;font-size:0.85rem;font-weight:600;"></div>
+  </div>
+  <button class="save-btn" onclick="changePassword()">💾 Update Credentials</button>
+</div>
+
+<!-- DATA EXPORT -->
+<div class="panel" id="panel-data">
+  <div class="panel-header"><h2>Data Export 💾</h2><p>Export enquiries and contacts as CSV. Clear all data.</p></div>
+  <div class="ss">
+    <div class="ss-title">Export</div>
+    <div style="display:flex;gap:0.8rem;flex-wrap:wrap;margin-top:0.5rem;">
+      <button class="save-btn" onclick="exportCSV('enquiry')">📥 Export Enquiries (CSV)</button>
+      <button class="save-btn green" onclick="exportCSV('contact')">📥 Export Contacts (CSV)</button>
+      <button class="save-btn dark" onclick="viewRaw()">👁️ View Raw Data</button>
+      <button class="save-btn red" onclick="clearData()">🗑️ Clear All Data</button>
+    </div>
+  </div>
+  <div class="ss" style="margin-top:1rem;">
+    <div class="ss-title">Raw Data</div>
+    <textarea id="rawData" style="width:100%;min-height:180px;font-family:monospace;font-size:0.75rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.8rem;resize:vertical;" readonly placeholder="Click 'View Raw Data' above..."></textarea>
+  </div>
+</div>
+
+</div></div><!-- end main -->
+
+<div id="toast">✅ Saved!</div>
+
+<script>
+// ===== AUTH =====
+function getAuth(){return JSON.parse(localStorage.getItem('gmas_admin_creds')||'{"user":"admin","pass":"gmas2024"}');}
+function doLogin(){var u=document.getElementById('loginUser').value,p=document.getElementById('loginPass').value,a=getAuth();if(u===a.user&&p===a.pass){localStorage.setItem('gmas_session','1');document.getElementById('loginScreen').style.display='none';initAdmin();}else{document.getElementById('loginError').style.display='block';}}
+function doLogout(){localStorage.removeItem('gmas_session');location.reload();}
+if(localStorage.getItem('gmas_session')==='1'){document.getElementById('loginScreen').style.display='none';initAdmin();}
+
+// ===== HELPERS =====
+function getCfg(){return JSON.parse(localStorage.getItem('gmas_config')||'{}');}
+function setCfg(d){var c={...getCfg(),...d};localStorage.setItem('gmas_config',JSON.stringify(c));}
+function getSubs(){return JSON.parse(localStorage.getItem('gmas_submissions')||'[]');}
+function getEnqs(){return getSubs().filter(s=>s.type==='enquiry');}
+function getCons(){return getSubs().filter(s=>s.type==='contact');}
+function gv(id){var e=document.getElementById(id);return e?e.value:'';}
+function sv(id,v){var e=document.getElementById(id);if(e)e.value=v||'';}
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtDate(d){if(!d)return'—';var dt=new Date(d);return dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function statusBadge(s){var m={'New':'badge-new','In Review':'badge-review','Completed':'badge-done'};return'<span class="badge '+(m[s]||'badge-new')+'">'+(s||'New')+'</span>';}
+function toast(msg,ok=true){var t=document.getElementById('toast');t.innerHTML=(ok?'✅ ':'❌ ')+msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function qb(id){return document.querySelector('.sb-btn[onclick*="\''+id+'\'"]');}
+
+// ===== PANEL ROUTING =====
+function showPanel(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
+  var p=document.getElementById('panel-'+id);if(p)p.classList.add('active');
+  if(btn)btn.classList.add('active');
+  var loaders={submissions:renderEnqTables,contacts:renderConTable,slides:loadSlidesEditor,offer:loadOfferEditor,ticker:loadTickerEditor,stats:loadStatsEditor,hometext:loadHomeText,testimonials:loadTestisEditor,services:loadServicesEditor,training:loadCoursesEditor,faq:loadFaqEditor,brand:loadBrandEditor,navbar:loadNavEditor,pagecovers:loadPageCoversEditor,about:loadAboutEditor,contactinfo:loadContactInfoEditor,dashboard:refreshDashboard};
+  if(loaders[id])loaders[id]();
+}
+function switchSub(btn,id){var par=btn.closest('.panel');par.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');par.querySelectorAll('.stabp').forEach(p=>p.classList.remove('active'));var tp=document.getElementById('stabp-'+id);if(tp)tp.classList.add('active');}
+
+// ===== INIT =====
+function initAdmin(){refreshDashboard();updateCountBadges();loadBrandEditor();}
+function updateCountBadges(){var e=getEnqs(),c=getCons();document.getElementById('sbEnqCount').textContent=e.length;document.getElementById('sbConCount').textContent=c.length;}
+
+// ===== DASHBOARD =====
+function refreshDashboard(){
+  var e=getEnqs(),c=getCons();
+  var now=new Date(),thisMonth=e.filter(x=>{var d=new Date(x.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  document.getElementById('ds-enq').textContent=e.length;
+  document.getElementById('ds-new').textContent=e.filter(x=>x.status==='New').length;
+  document.getElementById('ds-con').textContent=c.length;
+  document.getElementById('ds-month').textContent=thisMonth.length;
+  var recent=e.slice(-5).reverse();
+  var el=document.getElementById('dashRecent');
+  if(!recent.length){el.innerHTML='<div class="empty"><div class="empty-icon">📋</div><p>No enquiries yet.</p></div>';return;}
+  el.innerHTML='<div class="table-wrap"><table class="dt"><thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Services</th><th>Status</th></tr></thead><tbody>'+recent.map(x=>'<tr><td>'+fmtDate(x.date)+'</td><td><strong>'+escH(x.name)+'</strong></td><td>'+escH(x.phone)+'</td><td style="font-size:0.78rem;">'+(x.services||[]).join(', ')+'</td><td>'+statusBadge(x.status)+'</td></tr>').join('')+'</tbody></table></div>';
+}
+
+// ===== ENQUIRIES =====
+function renderEnqTables(){
+  var e=getEnqs();
+  function rows(arr,cols){
+    if(!arr.length)return'<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-light);">No records.</td></tr>';
+    return arr.map(x=>'<tr><td>'+fmtDate(x.date)+'</td><td><strong>'+escH(x.name)+'</strong></td><td>'+escH(x.phone)+'</td><td style="font-size:0.78rem;">'+(x.services||[]).slice(0,2).join(', ')+'</td>'+(cols?'<td style="font-size:0.78rem;">'+escH(x.entityType||'—')+'</td><td style="font-size:0.78rem;">'+escH(x.budget||'—')+'</td>':'')+'<td>'+statusBadge(x.status)+'</td><td style="white-space:nowrap;"><select onchange="updateEnqStatus(\''+x.id+'\',this.value)" style="font-size:0.72rem;border:1px solid var(--border);border-radius:5px;padding:0.2rem;"><option'+(x.status==='New'?' selected':'')+'>New</option><option'+(x.status==='In Review'?' selected':'')+'>In Review</option><option'+(x.status==='Completed'?' selected':'')+'>Completed</option></select> <button class="abtn sky" onclick="viewEnq(\''+x.id+'\')">View</button> <button class="abtn red" onclick="delEnq(\''+x.id+'\')">Del</button></td></tr>').join('');
+  }
+  document.getElementById('enqAll').innerHTML=rows(e,true);
+  document.getElementById('enqNew').innerHTML=rows(e.filter(x=>x.status==='New'),false);
+  document.getElementById('enqReview').innerHTML=rows(e.filter(x=>x.status==='In Review'),false);
+  document.getElementById('enqDone').innerHTML=rows(e.filter(x=>x.status==='Completed'),false);
+}
+function filterEnq(q){var e=getEnqs().filter(x=>(x.name+x.phone+(x.services||[]).join(' ')).toLowerCase().includes(q.toLowerCase()));document.getElementById('enqAll').innerHTML=e.map(x=>'<tr><td>'+fmtDate(x.date)+'</td><td><strong>'+escH(x.name)+'</strong></td><td>'+escH(x.phone)+'</td><td>'+(x.services||[]).join(', ')+'</td><td>'+escH(x.entityType||'—')+'</td><td>'+escH(x.budget||'—')+'</td><td>'+statusBadge(x.status)+'</td><td><button class="abtn sky" onclick="viewEnq(\''+x.id+'\')">View</button></td></tr>').join('')||'<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--text-light);">No results.</td></tr>';}
+function updateEnqStatus(id,status){var s=getSubs();var i=s.findIndex(x=>x.id===id);if(i>-1){s[i].status=status;localStorage.setItem('gmas_submissions',JSON.stringify(s));toast('Status updated');updateCountBadges();}}
+function viewEnq(id){var x=getEnqs().find(e=>e.id===id);if(!x)return;alert('ENQUIRY DETAILS\n\nName: '+x.name+'\nPhone: '+x.phone+'\nEmail: '+(x.email||'—')+'\nCity: '+(x.city||'—')+'\nEntity: '+(x.entityType||'—')+'\nServices: '+(x.services||[]).join(', ')+'\nBudget: '+(x.budget||'—')+'\nTimeline: '+(x.timeline||'—')+'\nSource: '+(x.source||'—')+'\nMessage: '+(x.message||'—')+'\nDate: '+fmtDate(x.date));}
+function delEnq(id){if(!confirm('Delete this enquiry?'))return;var s=getSubs().filter(x=>x.id!==id);localStorage.setItem('gmas_submissions',JSON.stringify(s));renderEnqTables();refreshDashboard();updateCountBadges();toast('Deleted');}
+function renderConTable(){var c=getCons();var tb=document.getElementById('conTable');tb.innerHTML=c.length?c.reverse().map(x=>'<tr><td>'+fmtDate(x.date)+'</td><td><strong>'+escH(x.name)+'</strong></td><td>'+escH(x.phone)+'</td><td>'+escH(x.subject||'—')+'</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escH(x.message)+'</td><td><button class="abtn red" onclick="delCon(\''+x.date+'\')">Delete</button></td></tr>').join(''):'<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-light);">No messages yet.</td></tr>';}
+function delCon(date){if(!confirm('Delete?'))return;localStorage.setItem('gmas_submissions',JSON.stringify(getSubs().filter(s=>!(s.type==='contact'&&s.date===date))));renderConTable();updateCountBadges();}
+
+// ===== SLIDES =====
+var slides=[];
+var DEFAULT_SLIDES=[
+  {title:'Your Trusted <span class="hero-highlight">Accounting Partner</span> in Jhapa',desc:'Training · Consulting · Outsourcing — Professional accounting, auditing, tax compliance, and business advisory from Birtamode, Jhapa.',badge:'#1 Accounting Firm in Jhapa',btn1:'Get Free Consultation',btn2:'Explore Services →',bg:'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=80',overlay:'rgba(5,15,35,0.80)'},
+  {title:'Accounting <span class="hero-highlight">Training Classes</span> Starting Soon',desc:'Learn practical accounting, Tally ERP, and QuickBooks with certified trainers. Get job-ready in 30–90 days. Morning & evening batches available.',badge:'📚 New Batch Enrolling Now',btn1:'Enroll in Training',btn2:'View Courses →',bg:'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1600&q=80',overlay:'rgba(5,15,30,0.82)'},
+  {title:'Tax & VAT Compliance <span class="hero-highlight">Done Right</span>',desc:'Never miss an IRD deadline. Our expert team handles complete tax compliance — VAT returns, TDS, income tax, and more.',badge:'🧾 IRD Certified Experts',btn1:'Get Tax Help',btn2:'Learn More →',bg:'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1600&q=80',overlay:'rgba(10,5,30,0.80)'},
+  {title:'Business <span class="hero-highlight">Auditing</span> & Assurance Services',desc:'Statutory and internal audit for companies, NGOs, and cooperatives. IRD-compliant reports by registered auditors in Jhapa.',badge:'🔍 Certified Auditors',btn1:'Request Audit',btn2:'View Services →',bg:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&q=80',overlay:'rgba(8,18,40,0.80)'},
+];
+function loadSlidesEditor(){
+  var saved=localStorage.getItem('gmas_home_config');
+  slides=saved?JSON.parse(saved).slides||DEFAULT_SLIDES:DEFAULT_SLIDES;
+  renderSlidesEditor();
+}
+function renderSlidesEditor(){
+  document.getElementById('slidesEditor').innerHTML=slides.map((s,i)=>`
+    <div class="ec">
+      <div class="ec-header"><div class="ec-num">${i+1}</div><div class="ec-title">Slide ${i+1}</div><button class="rm-btn" onclick="slides.splice(${i},1);renderSlidesEditor()">✕ Remove</button></div>
+      <div class="sg">
+        <div class="g s2"><label>Background Image URL <small style="color:var(--sky);font-weight:600;">(Unsplash recommended)</small></label><input type="text" value="${escH(s.bg||'')}" oninput="slides[${i}].bg=this.value" placeholder="https://images.unsplash.com/..."/></div>
+        <div class="g"><label>Overlay Color (rgba)</label><input type="text" value="${escH(s.overlay||'rgba(5,15,35,0.80)')}" oninput="slides[${i}].overlay=this.value" placeholder="rgba(5,15,35,0.80)"/></div>
+        <div class="g"><label>Badge Text</label><input type="text" value="${escH(s.badge||'')}" oninput="slides[${i}].badge=this.value"/></div>
+        <div class="g s2"><label>Title HTML <small style="color:var(--text-light);">Use &lt;span class="hero-highlight"&gt;word&lt;/span&gt; for sky blue</small></label><textarea oninput="slides[${i}].title=this.value">${escH(s.title||'')}</textarea></div>
+        <div class="g s2"><label>Description</label><textarea oninput="slides[${i}].desc=this.value">${escH(s.desc||'')}</textarea></div>
+        <div class="g"><label>Button 1 Text</label><input type="text" value="${escH(s.btn1||'')}" oninput="slides[${i}].btn1=this.value"/></div>
+        <div class="g"><label>Button 2 Text</label><input type="text" value="${escH(s.btn2||'')}" oninput="slides[${i}].btn2=this.value"/></div>
+      </div>
+    </div>`).join('');
+}
+function addSlide(){slides.push({title:'New <span class="hero-highlight">Slide Title</span>',desc:'Slide description here.',badge:'GMAS – Your Financial Partner',btn1:'Get Started',btn2:'Learn More →',bg:'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80',overlay:'rgba(5,15,35,0.80)'});renderSlidesEditor();}
+function saveSlides(){var saved=JSON.parse(localStorage.getItem('gmas_home_config')||'{}');saved.slides=slides;localStorage.setItem('gmas_home_config',JSON.stringify(saved));toast('Slides saved! Refresh home page.');}
+
+// ===== OFFER CARD =====
+function loadOfferEditor(){var saved=JSON.parse(localStorage.getItem('gmas_home_config')||'{}');var o=saved.offer||{};var tog=document.getElementById('toggle-offerShow');if(tog){if(o.show)tog.classList.add('on');else tog.classList.remove('on');}sv('offer-headerLabel',o.headerLabel||'LIMITED OFFER');sv('offer-oldPrice',o.oldPrice||'');sv('offer-newPrice',o.newPrice||'');sv('offer-saveAmt',o.saveAmt||'');sv('offer-ctaText',o.ctaText||'Claim This Offer');sv('offer-ctaLink',o.ctaLink||'enquiry.html');sv('offer-endDate',o.endDate||'');}
+function saveOffer(){var saved=JSON.parse(localStorage.getItem('gmas_home_config')||'{}');var tog=document.getElementById('toggle-offerShow');saved.offer={show:tog&&tog.classList.contains('on'),headerLabel:gv('offer-headerLabel'),oldPrice:gv('offer-oldPrice'),newPrice:gv('offer-newPrice'),saveAmt:gv('offer-saveAmt'),ctaText:gv('offer-ctaText'),ctaLink:gv('offer-ctaLink'),endDate:gv('offer-endDate')};localStorage.setItem('gmas_home_config',JSON.stringify(saved));toast('Offer card saved!');}
+
+// ===== TICKER =====
+var ticker=[];
+var DEFAULT_TICKER=[{icon:'📚',text:'Accounting Training Classes — New Batch Starting'},{icon:'💻',text:'Tally ERP & QuickBooks Training'},{icon:'📒',text:'Bookkeeping & Accounting Outsourcing'},{icon:'🔍',text:'Auditing & Assurance Services'},{icon:'🧾',text:'VAT & Tax Compliance — IRD Experts'},{icon:'🤝',text:'Business Consulting & Advisory'},{icon:'📍',text:'Birtamode-04, Jhapa — Walk In Anytime'},{icon:'⭐',text:'Trusted by 500+ Clients Across Jhapa'}];
+function loadTickerEditor(){var s=JSON.parse(localStorage.getItem('gmas_home_config')||'{}');ticker=s.ticker||DEFAULT_TICKER;var tog=document.getElementById('toggle-tickerShow');if(tog){if(s.tickerShow!==false)tog.classList.add('on');else tog.classList.remove('on');}renderTickerEditor();}
+function renderTickerEditor(){document.getElementById('tickerEditor').innerHTML=ticker.map((t,i)=>`<div class="tr"><input class="icon-in" type="text" value="${escH(t.icon)}" oninput="ticker[${i}].icon=this.value" placeholder="📢"/><input type="text" value="${escH(t.text)}" oninput="ticker[${i}].text=this.value"/><button class="del-btn" onclick="ticker.splice(${i},1);renderTickerEditor()">✕</button></div>`).join('');}
+function addTickerItem(){ticker.push({icon:'✅',text:'New ticker item'});renderTickerEditor();}
+function saveTicker(){var s=JSON.parse(localStorage.getItem('gmas_home_config')||'{}');s.ticker=ticker;var tog=document.getElementById('toggle-tickerShow');s.tickerShow=tog&&tog.classList.contains('on');localStorage.setItem('gmas_home_config',JSON.stringify(s));toast('Ticker saved!');}
+
+// ===== STATS BAND =====
+var stats=[];
+var DEFAULT_STATS=[{icon:'👥',num:'500+',label:'Clients Served'},{icon:'🎓',num:'1200+',label:'Training Students'},{icon:'📅',num:'6+',label:'Years Experience'},{icon:'✅',num:'100%',label:'Tax Compliance Rate'}];
+function loadStatsEditor(){var s=JSON.parse(localStorage.getItem('gmas_home_config')||'{}');stats=s.statsBand||DEFAULT_STATS;var tog=document.getElementById('toggle-statsShow');if(tog){if(s.statsShow!==false)tog.classList.add('on');else tog.classList.remove('on');}renderStatsEditor();}
+function renderStatsEditor(){document.getElementById('statsEditor').innerHTML=stats.map((s,i)=>`<div class="tr"><input class="icon-in" type="text" value="${escH(s.icon||'')}" oninput="stats[${i}].icon=this.value" placeholder="⭐"/><input type="text" value="${escH(s.num)}" oninput="stats[${i}].num=this.value" style="max-width:90px;" placeholder="100+"/><input type="text" value="${escH(s.label)}" oninput="stats[${i}].label=this.value" placeholder="Label"/><button class="del-btn" onclick="stats.splice(${i},1);renderStatsEditor()">✕</button></div>`).join('');}
+function addStat(){stats.push({icon:'⭐',num:'0+',label:'New Stat'});renderStatsEditor();}
+function saveStats(){var s=JSON.parse(localStorage.getItem('gmas_home_config')||'{}');s.statsBand=stats;var tog=document.getElementById('toggle-statsShow');s.statsShow=tog&&tog.classList.contains('on');localStorage.setItem('gmas_home_config',JSON.stringify(s));toast('Stats saved!');}
+
+// ===== HOME TEXT =====
+function loadHomeText(){var s=JSON.parse(localStorage.getItem('gmas_home_config')||'{}');var t=s.sectionText||{};sv('h-badge',t.badge||'Trusted Accounting & Management Firm');sv('h-desc',t.desc||'');sv('h-btn1',t.btn1||'Get Free Consultation');sv('h-btn2',t.btn2||'Explore Services →');sv('h-whyTitle',t.whyTitle||'Your Trusted Financial Partner in Jhapa');sv('h-whyDesc',t.whyDesc||'');sv('h-processTitle',t.processTitle||'Simple 4-Step Process');sv('h-ctaTitle',t.ctaTitle||'Ready to Grow Your Business Financially?');sv('h-ctaDesc',t.ctaDesc||'');sv('h-ctaBtn1',t.ctaBtn1||'Get Free Consultation');sv('h-ctaBtn1Link',t.ctaBtn1Link||'enquiry.html');}
+function saveHomeText(){var s=JSON.parse(localStorage.getItem('gmas_home_config')||'{}');s.sectionText={badge:gv('h-badge'),desc:gv('h-desc'),btn1:gv('h-btn1'),btn2:gv('h-btn2'),whyTitle:gv('h-whyTitle'),whyDesc:gv('h-whyDesc'),processTitle:gv('h-processTitle'),ctaTitle:gv('h-ctaTitle'),ctaDesc:gv('h-ctaDesc'),ctaBtn1:gv('h-ctaBtn1'),ctaBtn1Link:gv('h-ctaBtn1Link')};localStorage.setItem('gmas_home_config',JSON.stringify(s));toast('Home text saved!');}
+
+// ===== TESTIMONIALS =====
+var testis=[];
+var DEFAULT_TESTIS=[{name:'Rajesh Sharma',role:'Business Owner, Jhapa',initial:'R',rating:5,color:'#0EA5E9',text:'GMAS handled our entire bookkeeping and VAT compliance. Highly professional and affordable.'},{name:'Sunita Rai',role:'Accounting Student',initial:'S',rating:5,color:'#E11D48',text:'I took their Tally training and landed a job within 2 months. Best investment I made.'},{name:'Bikash Limbu',role:'NGO Director, Bhadrapur',initial:'B',rating:5,color:'#10B981',text:'Their tax compliance support saved us from a major IRD penalty. Very thankful!'}];
+function loadTestisEditor(){testis=JSON.parse(localStorage.getItem('gmas_testis')||JSON.stringify(DEFAULT_TESTIS));renderTestisEditor();}
+function renderTestisEditor(){document.getElementById('testiEditor').innerHTML=testis.map((t,i)=>`<div class="ec"><div class="ec-header"><div class="ec-num">${i+1}</div><div class="ec-title">${escH(t.name||'Testimonial '+(i+1))}</div><button class="rm-btn" onclick="testis.splice(${i},1);renderTestisEditor()">✕ Remove</button></div><div class="sg"><div class="g"><label>Name</label><input type="text" value="${escH(t.name)}" oninput="testis[${i}].name=this.value"/></div><div class="g"><label>Role / Company</label><input type="text" value="${escH(t.role)}" oninput="testis[${i}].role=this.value"/></div><div class="g"><label>Initial Letter</label><input type="text" value="${escH(t.initial||'')}" oninput="testis[${i}].initial=this.value" maxlength="2"/></div><div class="g"><label>Rating (1–5)</label><input type="number" min="1" max="5" value="${t.rating||5}" oninput="testis[${i}].rating=+this.value"/></div><div class="g"><label>Avatar Color</label><input type="color" value="${t.color||'#0EA5E9'}" oninput="testis[${i}].color=this.value" style="height:36px;width:50px;"/></div><div class="g s2"><label>Testimonial Text</label><textarea oninput="testis[${i}].text=this.value">${escH(t.text)}</textarea></div></div></div>`).join('');}
+function addTesti(){testis.push({name:'Client Name',role:'Role, City',initial:'C',rating:5,color:'#0EA5E9',text:'Amazing service!'});renderTestisEditor();}
+function saveTestis(){localStorage.setItem('gmas_testis',JSON.stringify(testis));toast('Testimonials saved!');}
+
+// ===== PRICING =====
+var pricing=[];
+var DEFAULT_PRICING=[{name:'Basic',desc:'For freelancers & small shops',icon:'🌱',price:'NPR 3,000',period:'per month',featured:false,features:'Monthly Bookkeeping\nVAT Return Filing\nBank Reconciliation\nBasic Financial Report\nEmail & Phone Support'},{name:'Business',desc:'For SMEs and growing businesses',icon:'🏢',price:'NPR 8,000',period:'per month',featured:true,features:'Full Bookkeeping\nVAT + TDS Filing\nPayroll Management\nMonthly Financial Statements\nAnnual Audit Support\nDedicated Accountant'},{name:'Enterprise',desc:'For large organizations & NGOs',icon:'🏦',price:'Custom',period:'quote on request',featured:false,features:'Full Accounting Outsource\nInternal & Statutory Audit\nTax Planning\nManagement Consulting\nPriority Support'}];
+function loadServicesEditor(){pricing=JSON.parse(localStorage.getItem('gmas_pricing')||JSON.stringify(DEFAULT_PRICING));renderPricingEditor();svcCards=JSON.parse(localStorage.getItem('gmas_svc_cards')||JSON.stringify(DEFAULT_SVC_CARDS));renderSvcCardsEditor();var st=JSON.parse(localStorage.getItem('gmas_svc_text')||'{}');sv('svc-mainTitle',st.mainTitle||'');sv('svc-mainDesc',st.mainDesc||'');sv('svc-pricingTitle',st.pricingTitle||'');sv('svc-pricingDesc',st.pricingDesc||'');}
+function renderPricingEditor(){document.getElementById('pricingEditor').innerHTML=pricing.map((p,i)=>`<div class="ec"><div class="ec-header"><div class="ec-num">${i+1}</div><div class="ec-title">${escH(p.name)}</div><button class="rm-btn" onclick="pricing.splice(${i},1);renderPricingEditor()">✕ Remove</button></div><div class="sg"><div class="g"><label>Plan Name</label><input type="text" value="${escH(p.name)}" oninput="pricing[${i}].name=this.value"/></div><div class="g"><label>Icon</label><input type="text" value="${escH(p.icon||'')}" oninput="pricing[${i}].icon=this.value"/></div><div class="g"><label>Price</label><input type="text" value="${escH(p.price)}" oninput="pricing[${i}].price=this.value"/></div><div class="g"><label>Period</label><input type="text" value="${escH(p.period||'')}" oninput="pricing[${i}].period=this.value"/></div><div class="g s2"><label>Short Description</label><input type="text" value="${escH(p.desc||'')}" oninput="pricing[${i}].desc=this.value"/></div><div class="g s2"><label>Features (one per line)</label><textarea oninput="pricing[${i}].features=this.value">${escH(p.features||'')}</textarea></div><div class="g"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" ${p.featured?'checked':''} onchange="pricing[${i}].featured=this.checked"/> ⭐ Featured (highlighted)</label></div></div></div>`).join('');}
+function addPricing(){pricing.push({name:'New Plan',desc:'For...',icon:'📦',price:'NPR 0',period:'per month',featured:false,features:'Feature 1\nFeature 2'});renderPricingEditor();}
+function savePricing(){localStorage.setItem('gmas_pricing',JSON.stringify(pricing));toast('Pricing saved!');}
+
+// ===== SERVICE CARDS =====
+var svcCards=[];
+var DEFAULT_SVC_CARDS=[{icon:'📚',title:'Accounting Training Classes',desc:'Practical training for beginners to advanced learners.'},{icon:'💻',title:'Software Training',desc:'Tally ERP, QuickBooks, and Excel for businesses.'},{icon:'📒',title:'Bookkeeping & Accounting',desc:'Full outsourced bookkeeping and financial management.'},{icon:'🔍',title:'Auditing & Assurance',desc:'Certified audits for companies, NGOs, and cooperatives.'},{icon:'🧾',title:'Tax & VAT Compliance',desc:'Complete IRD compliance — VAT, TDS, income tax.'},{icon:'🤝',title:'Business Consulting',desc:'Strategy, planning, and advisory for growing businesses.'}];
+function renderSvcCardsEditor(){document.getElementById('svcCardsEditor').innerHTML=svcCards.map((s,i)=>`<div class="ec"><div class="ec-header"><div class="ec-num">${i+1}</div><div class="ec-title">${escH(s.title)}</div><button class="rm-btn" onclick="svcCards.splice(${i},1);renderSvcCardsEditor()">✕ Remove</button></div><div class="sg"><div class="g"><label>Icon (emoji)</label><input type="text" value="${escH(s.icon||'')}" oninput="svcCards[${i}].icon=this.value"/></div><div class="g"><label>Title</label><input type="text" value="${escH(s.title)}" oninput="svcCards[${i}].title=this.value"/></div><div class="g s2"><label>Description</label><textarea oninput="svcCards[${i}].desc=this.value">${escH(s.desc)}</textarea></div></div></div>`).join('');}
+function addSvcCard(){svcCards.push({icon:'⭐',title:'New Service',desc:'Description here.'});renderSvcCardsEditor();}
+function saveSvcCards(){localStorage.setItem('gmas_svc_cards',JSON.stringify(svcCards));toast('Service cards saved!');}
+function saveSvcText(){localStorage.setItem('gmas_svc_text',JSON.stringify({mainTitle:gv('svc-mainTitle'),mainDesc:gv('svc-mainDesc'),pricingTitle:gv('svc-pricingTitle'),pricingDesc:gv('svc-pricingDesc')}));toast('Section text saved!');}
+
+// ===== TRAINING COURSES =====
+var courses=[];
+var DEFAULT_COURSES=[{name:'Basic Accounting Course',duration:'2 Months',level:'Beginner',price:'NPR 4,000',desc:'Foundation accounting — double entry, ledger, P&L, balance sheet.'},{name:'Advanced Accounting',duration:'3 Months',level:'Intermediate',price:'NPR 7,000',desc:'Depreciation, provisions, company accounts, ratio analysis.'},{name:'Tally ERP Training',duration:'45 Days',level:'Practical',price:'NPR 5,500',desc:'TallyPrime — company creation, inventory, payroll, VAT.'},{name:'QuickBooks Training',duration:'30 Days',level:'Practical',price:'NPR 5,000',desc:'QuickBooks Online & Desktop — invoicing, payroll, reports.'},{name:'Tax & VAT Practical',duration:'30 Days',level:'Practical',price:'NPR 4,500',desc:'VAT filing, TDS, income tax — hands-on IRD submissions.'},{name:'Complete Accounting Package',duration:'6 Months',level:'All Levels',price:'NPR 18,000',desc:'All-in-one: Basic + Advanced + Tally + Tax. Job-ready.'}];
+function loadCoursesEditor(){courses=JSON.parse(localStorage.getItem('gmas_courses')||JSON.stringify(DEFAULT_COURSES));renderCoursesEditor();}
+function renderCoursesEditor(){document.getElementById('coursesEditor').innerHTML=courses.map((c,i)=>`<div class="ec"><div class="ec-header"><div class="ec-num">${i+1}</div><div class="ec-title">${escH(c.name)}</div><button class="rm-btn" onclick="courses.splice(${i},1);renderCoursesEditor()">✕ Remove</button></div><div class="sg"><div class="g s2"><label>Course Name</label><input type="text" value="${escH(c.name)}" oninput="courses[${i}].name=this.value"/></div><div class="g"><label>Duration</label><input type="text" value="${escH(c.duration)}" oninput="courses[${i}].duration=this.value"/></div><div class="g"><label>Level</label><input type="text" value="${escH(c.level)}" oninput="courses[${i}].level=this.value"/></div><div class="g"><label>Price</label><input type="text" value="${escH(c.price)}" oninput="courses[${i}].price=this.value"/></div><div class="g"><label>Old Price (if discount)</label><input type="text" value="${escH(c.oldPrice||'')}" oninput="courses[${i}].oldPrice=this.value" placeholder="Leave empty if no discount"/></div><div class="g s2"><label>Short Description</label><textarea oninput="courses[${i}].desc=this.value">${escH(c.desc||'')}</textarea></div></div></div>`).join('');}
+function addCourse(){courses.push({name:'New Course',duration:'1 Month',level:'Beginner',price:'NPR 0',desc:'Course description.'});renderCoursesEditor();}
+function saveCourses(){localStorage.setItem('gmas_courses',JSON.stringify(courses));toast('Courses saved!');}
+
+// ===== FAQ =====
+var faq=[];
+var DEFAULT_FAQ=[{q:'Do you work with businesses outside Jhapa?',a:'Yes! We serve clients across Nepal. Documents can be submitted digitally via phone, email, and WhatsApp.'},{q:'How do I get started?',a:'Fill out our enquiry form or call us directly. We schedule a free consultation to understand your needs.'},{q:'What accounting software do you use?',a:'Tally ERP, QuickBooks, Excel, and custom ledger formats. We adapt to your existing systems.'},{q:'Are your audit reports accepted by IRD?',a:'Yes. Prepared by certified professionals, fully compliant with IRD and Nepal Companies Act.'},{q:'Can you help with VAT registration?',a:'Absolutely. We handle the complete VAT and PAN registration process — documentation to IRD submission.'}];
+function loadFaqEditor(){faq=JSON.parse(localStorage.getItem('gmas_faq')||JSON.stringify(DEFAULT_FAQ));renderFaqEditor();}
+function renderFaqEditor(){document.getElementById('faqEditor').innerHTML=faq.map((f,i)=>`<div class="ec"><div class="ec-header"><div class="ec-num">${i+1}</div><div class="ec-title">${escH(f.q||'Question '+(i+1))}</div><button class="rm-btn" onclick="faq.splice(${i},1);renderFaqEditor()">✕ Remove</button></div><div class="sg"><div class="g s2"><label>Question</label><input type="text" value="${escH(f.q)}" oninput="faq[${i}].q=this.value"/></div><div class="g s2"><label>Answer</label><textarea oninput="faq[${i}].a=this.value">${escH(f.a)}</textarea></div></div></div>`).join('');}
+function addFaq(){faq.push({q:'New Question?',a:'Answer here.'});renderFaqEditor();}
+function saveFaq(){localStorage.setItem('gmas_faq',JSON.stringify(faq));toast('FAQ saved!');}
+
+// ===== BRAND =====
+function loadBrandEditor(){var cfg=getCfg();sv('cfg-siteName',cfg.siteName||'GMAS');sv('cfg-siteTagline',cfg.siteTagline||'Management & Accounting');sv('cfg-footerDesc',cfg.footerDesc||'');sv('cfg-copyYear',cfg.copyYear||'2025');sv('cfg-metaDesc',cfg.metaDesc||'');if(cfg.colorSky){sv('cfg-skyHex',cfg.colorSky);document.getElementById('cfg-sky').value=cfg.colorSky;}if(cfg.colorRed){sv('cfg-redHex',cfg.colorRed);document.getElementById('cfg-red').value=cfg.colorRed;}if(cfg.colorDark){sv('cfg-darkHex',cfg.colorDark);document.getElementById('cfg-dark').value=cfg.colorDark;}if(cfg.logoBase64){document.getElementById('logoPreview').innerHTML='<img src="'+cfg.logoBase64+'" style="max-height:75px;max-width:180px;object-fit:contain;"/>';}}
+function saveBrand(){var sky=gv('cfg-skyHex')||'#0EA5E9',red=gv('cfg-redHex')||'#E11D48',dark=gv('cfg-darkHex')||'#0C1A2E';setCfg({siteName:gv('cfg-siteName'),siteTagline:gv('cfg-siteTagline'),footerDesc:gv('cfg-footerDesc'),copyYear:gv('cfg-copyYear'),metaDesc:gv('cfg-metaDesc'),colorSky:sky,colorRed:red,colorDark:dark});document.getElementById('prev-sky').style.background=sky;document.getElementById('prev-red').style.background=red;document.getElementById('prev-dark').style.background=dark;document.documentElement.style.setProperty('--sky',sky);document.documentElement.style.setProperty('--red',red);toast('Brand saved!');}
+function syncColor(k,v){document.getElementById('cfg-'+k+'Hex').value=v;document.getElementById('prev-'+k).style.background=v;}
+function syncColorHex(k,v){if(/^#[0-9a-fA-F]{6}$/.test(v)){document.getElementById('cfg-'+k).value=v;document.getElementById('prev-'+k).style.background=v;}}
+function handleLogoUpload(inp){var f=inp.files[0];if(!f||f.size>2097152){toast('File too large (max 2MB)',false);return;}var r=new FileReader();r.onload=e=>{var b=e.target.result;setCfg({logoBase64:b});document.getElementById('logoPreview').innerHTML='<img src="'+b+'" style="max-height:75px;max-width:180px;object-fit:contain;"/>';toast('Logo uploaded!');};r.readAsDataURL(f);}
+function removeLogo(){setCfg({logoBase64:''});document.getElementById('logoPreview').innerHTML='<span style="color:var(--text-light);font-size:0.78rem;">No logo uploaded</span>';toast('Logo removed');}
+
+// ===== NAVBAR =====
+var navLinks=[];
+var DEFAULT_NAV=[{label:'Home',href:'index.html',cta:false},{label:'Services',href:'services.html',cta:false},{label:'Training',href:'training.html',cta:false},{label:'About',href:'about.html',cta:false},{label:'Contact',href:'contact.html',cta:false},{label:'Get a Quote',href:'enquiry.html',cta:true}];
+function loadNavEditor(){navLinks=JSON.parse(localStorage.getItem('gmas_nav')||JSON.stringify(DEFAULT_NAV));renderNavEditor();var nc=JSON.parse(localStorage.getItem('gmas_nav_cfg')||'{}');document.getElementById('nav-bg').value=nc.bg||'#0C1A2E';sv('nav-bgHex',nc.bg||'#0C1A2E');document.getElementById('nav-cta').value=nc.cta||'#E11D48';sv('nav-ctaHex',nc.cta||'#E11D48');var sticky=document.getElementById('toggle-navSticky');if(sticky){if(nc.sticky!==false)sticky.classList.add('on');else sticky.classList.remove('on');}}
+function renderNavEditor(){document.getElementById('navEditor').innerHTML=navLinks.map((l,i)=>`<div class="nl-row"><input type="text" value="${escH(l.label)}" oninput="navLinks[${i}].label=this.value" placeholder="Label"/><input type="text" value="${escH(l.href)}" oninput="navLinks[${i}].href=this.value" placeholder="page.html"/><label><input type="checkbox" ${l.cta?'checked':''} onchange="navLinks[${i}].cta=this.checked"/> CTA Button</label><button class="del-btn" onclick="navLinks.splice(${i},1);renderNavEditor()">✕</button></div>`).join('');}
+function addNavLink(){navLinks.push({label:'New Link',href:'#',cta:false});renderNavEditor();}
+function saveNav(){localStorage.setItem('gmas_nav',JSON.stringify(navLinks));localStorage.setItem('gmas_nav_cfg',JSON.stringify({bg:gv('nav-bgHex')||'#0C1A2E',cta:gv('nav-ctaHex')||'#E11D48',sticky:document.getElementById('toggle-navSticky').classList.contains('on')}));toast('Navigation saved!');}
+
+// ===== PAGE COVERS =====
+var PAGE_KEYS=['services','training','about','contact','enquiry'];
+var PAGE_LABELS={services:'Services Page',training:'Training Page',about:'About Page',contact:'Contact Page',enquiry:'Enquiry / Quote Page'};
+var PAGE_DEFAULTS={services:{bg:'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=80',overlay:'rgba(10,20,40,0.78)',tag:'📊 Professional Services',title:'Accounting, Audit & Business Services',desc:'Complete financial services in Jhapa.'},training:{bg:'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1600&q=80',overlay:'rgba(5,15,30,0.76)',tag:'📚 Training Programs',title:'Accounting & Software Training Classes',desc:'Practical, job-focused training programs.'},about:{bg:'https://images.unsplash.com/photo-1560472355-536de3962603?w=1600&q=80',overlay:'rgba(8,18,38,0.78)',tag:'🏢 About GMAS',title:'Global Management and Accounting Solutions',desc:'Founded in Birtamode, Jhapa.'},contact:{bg:'https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1600&q=80',overlay:'rgba(10,20,40,0.76)',tag:'📞 Get in Touch',title:'Contact GMAS',desc:'We\'re here to help. Walk into our office anytime.'},enquiry:{bg:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&q=80',overlay:'rgba(5,15,30,0.78)',tag:'📋 Free Consultation',title:'Get a Free Quote',desc:'Fill out the form — we reply within 24 hours.'}};
+var pgCovers={};
+function loadPageCoversEditor(){pgCovers=JSON.parse(localStorage.getItem('gmas_page_covers')||'{}');document.getElementById('pageCoversEditor').innerHTML=PAGE_KEYS.map(key=>{var d=PAGE_DEFAULTS[key],c={...d,...(pgCovers[key]||{})};return`<div class="ss"><div class="ss-title">${PAGE_LABELS[key]}</div><div class="sg"><div class="g s2"><label>Background Image URL</label><input type="text" id="pcov-bg-${key}" value="${escH(c.bg||'')}" placeholder="https://images.unsplash.com/..."/></div><div class="g"><label>Overlay (rgba)</label><input type="text" id="pcov-ov-${key}" value="${escH(c.overlay||'rgba(10,20,40,0.78)')}" placeholder="rgba(10,20,40,0.78)"/></div><div class="g"><label>Tag Label</label><input type="text" id="pcov-tag-${key}" value="${escH(c.tag||'')}"/></div><div class="g s2"><label>Cover Title</label><input type="text" id="pcov-title-${key}" value="${escH(c.title||'')}"/></div><div class="g s2"><label>Cover Description</label><textarea id="pcov-desc-${key}">${escH(c.desc||'')}</textarea></div></div><div style="height:70px;border-radius:8px;overflow:hidden;margin-top:0.8rem;position:relative;border:1px solid var(--border);"><div style="position:absolute;inset:0;background-image:url('${c.bg||''}');background-size:cover;background-position:center;"></div><div style="position:absolute;inset:0;background:${c.overlay||'rgba(10,20,40,0.78)'};"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.82rem;">${PAGE_LABELS[key]} Preview</div></div></div>`;}).join('');}
+function savePageCovers(){PAGE_KEYS.forEach(k=>{pgCovers[k]={bg:gv('pcov-bg-'+k),overlay:gv('pcov-ov-'+k),tag:gv('pcov-tag-'+k),title:gv('pcov-title-'+k),desc:gv('pcov-desc-'+k)};});localStorage.setItem('gmas_page_covers',JSON.stringify(pgCovers));var cfg=getCfg();cfg.pageCovers=pgCovers;localStorage.setItem('gmas_config',JSON.stringify(cfg));toast('Page covers saved!');}
+
+// ===== ABOUT =====
+var aboutStats=[],teamMembers=[];
+var DEFAULT_ABOUT_STATS=[{num:'500+',label:'Clients Served'},{num:'1200+',label:'Students Trained'},{num:'6+',label:'Years Experience'},{num:'100%',label:'Compliance Rate'}];
+var DEFAULT_TEAM=[{name:'Managing Director',role:'Senior Accountant & Founder',initial:'M',photo:'',desc:'Founded GMAS with a vision to bring professional accounting to every business in Jhapa.'}];
+function loadAboutEditor(){var a=JSON.parse(localStorage.getItem('gmas_about')||'{}');sv('abt-p1',a.p1||'GMAS (Global Management and Accounting Solutions) is a professional services firm based in Birtamode-04, Jhapa, Nepal.');sv('abt-p2',a.p2||'We operate on the principles of accuracy, integrity, and affordability — delivering global-standard work from a local office you can actually walk into.');sv('abt-mission',a.mission||'To provide affordable, accurate, and professional accounting and management services that empower businesses to achieve financial clarity and growth.');sv('abt-vision',a.vision||'To be the leading accounting and management consultancy in Eastern Nepal, recognized for quality, integrity, and commitment to building a financially literate community.');aboutStats=a.stats||DEFAULT_ABOUT_STATS;teamMembers=a.team||DEFAULT_TEAM;renderAboutStatsEditor();renderTeamEditor();}
+function renderAboutStatsEditor(){document.getElementById('aboutStatsEditor').innerHTML=aboutStats.map((s,i)=>`<div class="tr"><input type="text" value="${escH(s.num)}" oninput="aboutStats[${i}].num=this.value" style="max-width:90px;" placeholder="100+"/><input type="text" value="${escH(s.label)}" oninput="aboutStats[${i}].label=this.value" placeholder="Label"/><button class="del-btn" onclick="aboutStats.splice(${i},1);renderAboutStatsEditor()">✕</button></div>`).join('');}
+function addAboutStat(){aboutStats.push({num:'0+',label:'New Stat'});renderAboutStatsEditor();}
+function renderTeamEditor(){document.getElementById('teamEditor').innerHTML=teamMembers.map((m,i)=>`<div class="ec"><div class="ec-header"><div class="ec-num">${i+1}</div><div class="ec-title">${escH(m.name)}</div><button class="rm-btn" onclick="teamMembers.splice(${i},1);renderTeamEditor()">✕ Remove</button></div><div class="sg"><div class="g"><label>Name</label><input type="text" value="${escH(m.name)}" oninput="teamMembers[${i}].name=this.value"/></div><div class="g"><label>Role / Title</label><input type="text" value="${escH(m.role)}" oninput="teamMembers[${i}].role=this.value"/></div><div class="g"><label>Initial Letter</label><input type="text" value="${escH(m.initial||'')}" oninput="teamMembers[${i}].initial=this.value" maxlength="2"/></div><div class="g"><label>Photo URL (optional)</label><input type="text" value="${escH(m.photo||'')}" oninput="teamMembers[${i}].photo=this.value"/></div><div class="g s2"><label>Description</label><textarea oninput="teamMembers[${i}].desc=this.value">${escH(m.desc||'')}</textarea></div></div></div>`).join('');}
+function addTeamMember(){teamMembers.push({name:'Team Member',role:'Role',initial:'T',photo:'',desc:'Description.'});renderTeamEditor();}
+function saveAbout(){localStorage.setItem('gmas_about',JSON.stringify({p1:gv('abt-p1'),p2:gv('abt-p2'),mission:gv('abt-mission'),vision:gv('abt-vision'),stats:aboutStats,team:teamMembers}));toast('About Us saved!');}
+
+// ===== CONTACT INFO =====
+function loadContactInfoEditor(){var cfg=getCfg();sv('cfg-phone',cfg.contactPhone||'+977-14506775 / 15971817');sv('cfg-whatsapp',cfg.contactWhatsapp||'9779714506775');sv('cfg-email',cfg.contactEmail||'info@gmas.com.np');sv('cfg-website',cfg.contactWebsite||'');sv('cfg-addr1',cfg.contactAddr1||'Birtamode-04, Jhapa Nepal');sv('cfg-addr2',cfg.contactAddr2||'Near Siddhartha Bank, Bhadrapur Road');sv('cfg-hours',cfg.contactHours||'Mon–Fri: 9AM–6PM, Sat: 10AM–4PM');}
+function saveContactInfo(){setCfg({contactPhone:gv('cfg-phone'),contactWhatsapp:gv('cfg-whatsapp'),contactEmail:gv('cfg-email'),contactWebsite:gv('cfg-website'),contactAddr1:gv('cfg-addr1'),contactAddr2:gv('cfg-addr2'),contactHours:gv('cfg-hours')});toast('Contact info saved!');}
+
+// ===== SECURITY =====
+function changePassword(){var cur=gv('cur-pass'),nu=gv('new-user'),np=gv('new-pass'),cp=gv('conf-pass');var a=getAuth();var msg=document.getElementById('passMsg');function showMsg(t,ok){msg.style.display='block';msg.style.color=ok?'#059669':'var(--red)';msg.textContent=t;}if(cur!==a.pass){return showMsg('❌ Current password incorrect',false);}if(np&&np.length<8){return showMsg('❌ New password must be at least 8 characters',false);}if(np&&np!==cp){return showMsg('❌ Passwords do not match',false);}var newCreds={user:nu||a.user,pass:np||a.pass};localStorage.setItem('gmas_admin_creds',JSON.stringify(newCreds));showMsg('✅ Credentials updated! Please log in again.',true);toast('Password changed! Logging out...');setTimeout(()=>doLogout(),1800);}
+
+// ===== DATA EXPORT =====
+function exportCSV(type){var d=getSubs().filter(s=>s.type===type);if(!d.length){toast('No data to export',false);return;}var keys=Object.keys(d[0]);var csv=[keys.join(','),...d.map(r=>keys.map(k=>'"'+(r[k]||'').toString().replace(/"/g,'""')+'"').join(','))].join('\n');var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='gmas_'+type+'_'+new Date().toISOString().slice(0,10)+'.csv';a.click();toast('CSV exported!');}
+function clearData(){if(!confirm('⚠️ Delete ALL enquiries and contact messages?\n\nThis CANNOT be undone!'))return;localStorage.setItem('gmas_submissions','[]');updateCountBadges();refreshDashboard();toast('All data cleared');}
+function viewRaw(){document.getElementById('rawData').value=JSON.stringify({config:getCfg(),submissions:getSubs(),slides,ticker,stats,pricing,courses,faq,testis,navLinks,pgCovers},null,2);}
+</script>
+</body>
+</html>
+
+

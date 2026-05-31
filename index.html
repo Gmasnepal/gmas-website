@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GMAS – Global Management and Accounting Solutions</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* HERO FIX — always show text left, card only on very wide */
+    .hero-overlay-content {
+      position: absolute; inset: 0; z-index: 15;
+      display: flex; align-items: center; padding-top: 70px;
+    }
+    .hero-inner {
+      display: flex; align-items: center;
+      padding: 3rem 0; width: 100%;
+    }
+    .hero-text-side {
+      flex: 1; min-width: 0; z-index: 2; max-width: 680px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="mainNav" style="background:transparent;">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">G</div>
+      <div class="logo-text">
+        <span class="logo-name">GMAS</span>
+        <span class="logo-tag">Management & Accounting</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="training.html">Training</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="enquiry.html" class="nav-cta">Get a Quote</a></li>
+    </ul>
+    <button id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div id="navOverlay"></div>
+  </div>
+</nav>
+
+<!-- HERO SLIDER -->
+<section class="hero-slider" id="heroSlider">
+  <div class="slides-wrapper" id="slidesWrapper"></div>
+  <button class="slide-nav prev" id="slidePrev">&#8249;</button>
+  <button class="slide-nav next" id="slideNext">&#8250;</button>
+  <div class="slide-dots" id="slideDots"></div>
+
+  <div class="hero-overlay-content">
+    <div class="container hero-inner">
+      <!-- TEXT SIDE -->
+      <div class="hero-text-side">
+        <div class="hero-badge-anim" id="heroBadge">
+          <span class="pulse-dot"></span>
+          <span id="heroBadgeText">Trusted Accounting & Management Firm</span>
+        </div>
+        <h1 class="hero-title" id="heroTitle">Your Trusted <span class="hero-highlight">Accounting Partner</span> in Jhapa</h1>
+        <p class="hero-desc" id="heroDesc">Training · Consulting · Outsourcing — Professional accounting, auditing, tax compliance, and business advisory from Birtamode, Jhapa.</p>
+        <div class="hero-cta-row">
+          <a href="enquiry.html" class="btn-hero-primary" id="heroBtn1">📋 Get Free Consultation</a>
+          <a href="services.html" class="btn-hero-secondary" id="heroBtn2">Explore Services →</a>
+        </div>
+        <div class="hero-stats-row">
+          <div class="hstat"><span class="hstat-num">500+</span><span class="hstat-lbl">Clients</span></div>
+          <div class="hstat-div"></div>
+          <div class="hstat"><span class="hstat-num">1200+</span><span class="hstat-lbl">Students</span></div>
+          <div class="hstat-div"></div>
+          <div class="hstat"><span class="hstat-num">100%</span><span class="hstat-lbl">Compliance</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<!-- STATS BAND -->
+<div class="stats-band" id="statsBand">
+  <div class="container stats-grid">
+    <div class="stat-item"><span class="stat-num count-anim" data-target="500">0</span><div class="stat-label">Clients Served</div></div>
+    <div class="stat-item"><span class="stat-num count-anim" data-target="1200">0</span><div class="stat-label">Training Students</div></div>
+    <div class="stat-item"><span class="stat-num">6+</span><div class="stat-label">Years Experience</div></div>
+    <div class="stat-item"><span class="stat-num">100%</span><div class="stat-label">Tax Compliance Rate</div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section">
+  <div class="container">
+    <div class="section-center">
+      <div class="section-tag">🏆 What We Offer</div>
+      <h2 class="section-title">Comprehensive <span>Financial & Management</span> Services</h2>
+      <p class="section-desc">From training the next generation of accountants to handling your full-scale business accounting and compliance — GMAS is your one-stop financial partner.</p>
+    </div>
+    <div class="services-grid">
+      <div class="svc-card"><div class="svc-icon">📚</div><div class="svc-body"><h3>Accounting Training Classes</h3><p>Practical accounting training for beginners to advanced learners. Learn real-world bookkeeping, ledgers, financial statements.</p><div class="svc-tags"><span class="svc-tag">Beginners</span><span class="svc-tag">Advanced</span><span class="svc-tag">Certificate</span></div></div></div>
+      <div class="svc-card"><div class="svc-icon">💻</div><div class="svc-body"><h3>Software Training Courses</h3><p>Hands-on training in Tally ERP, QuickBooks, and other leading accounting software used by businesses across Nepal.</p><div class="svc-tags"><span class="svc-tag">Tally</span><span class="svc-tag">QuickBooks</span><span class="svc-tag">Excel</span></div></div></div>
+      <div class="svc-card"><div class="svc-icon" style="background:rgba(225,29,72,0.1)">📒</div><div class="svc-body"><h3>Bookkeeping & Accounting</h3><p>Outsource your bookkeeping to our expert team. Accurate records, on-time reporting, and full financial management.</p><div class="svc-tags"><span class="svc-tag">Monthly</span><span class="svc-tag">Annual</span><span class="svc-tag">Outsource</span></div></div></div>
+      <div class="svc-card"><div class="svc-icon" style="background:rgba(225,29,72,0.1)">🔍</div><div class="svc-body"><h3>Auditing & Assurance</h3><p>Certified auditing for companies, NGOs, and cooperatives. Statutory audits, internal audits with IRD-recognized reports.</p><div class="svc-tags"><span class="svc-tag">Statutory</span><span class="svc-tag">Internal</span><span class="svc-tag">NGO/INGO</span></div></div></div>
+      <div class="svc-card"><div class="svc-icon">🧾</div><div class="svc-body"><h3>Tax & VAT Compliance</h3><p>Complete tax filing, VAT registration, PAN/TAN, IRD submissions, and compliance support to keep your business legal.</p><div class="svc-tags"><span class="svc-tag">IRD Filing</span><span class="svc-tag">VAT Return</span><span class="svc-tag">TDS</span></div></div></div>
+      <div class="svc-card"><div class="svc-icon" style="background:rgba(14,165,233,0.1)">🤝</div><div class="svc-body"><h3>Business Consultant Service</h3><p>Strategic advisory, company registration, financial planning, and management consulting for growing businesses.</p><div class="svc-tags"><span class="svc-tag">Startup</span><span class="svc-tag">Growth</span><span class="svc-tag">Strategy</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY GMAS -->
+<section class="section section-alt">
+  <div class="container why-grid">
+    <div>
+      <div class="section-tag">⭐ Why Choose GMAS?</div>
+      <h2 class="section-title">Your Trusted <span>Financial Partner</span> in Jhapa</h2>
+      <p class="section-desc">We combine local expertise with global accounting standards to deliver accurate, reliable, and affordable financial services.</p>
+      <div class="why-list">
+        <div class="why-item"><div class="why-icon">🎓</div><div><h4>Qualified Professionals</h4><p>Certified accountants and business advisors with years of hands-on experience.</p></div></div>
+        <div class="why-item"><div class="why-icon">⚡</div><div><h4>Fast & Accurate Service</h4><p>We deliver on time, every time. No delays, no errors.</p></div></div>
+        <div class="why-item"><div class="why-icon">💰</div><div><h4>Affordable Pricing</h4><p>Competitive packages for businesses of all sizes in Jhapa and beyond.</p></div></div>
+        <div class="why-item"><div class="why-icon">📍</div><div><h4>Local Office – Global Standard</h4><p>Birtamode, Jhapa office. Walk in anytime. NFRS/IFRS standards.</p></div></div>
+      </div>
+    </div>
+    <div>
+      <div style="background:linear-gradient(135deg,var(--dark),var(--dark2));border-radius:24px;padding:2.5rem;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(14,165,233,0.15),transparent);border-radius:50%;transform:translate(50%,-50%);"></div>
+        <div style="position:relative;z-index:2;">
+          <div style="font-size:2rem;margin-bottom:1rem;">📊</div>
+          <h3 style="font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:900;color:white;margin-bottom:0.8rem;">Ready to get started?</h3>
+          <p style="color:rgba(255,255,255,0.55);font-size:0.88rem;line-height:1.7;margin-bottom:1.5rem;">Book a free consultation with our accounting experts. We'll assess your needs and recommend the right services.</p>
+          <div style="display:grid;gap:0.7rem;margin-bottom:1.5rem;">
+            <div style="display:flex;align-items:center;gap:0.8rem;"><div style="width:32px;height:32px;background:rgba(14,165,233,0.2);border-radius:8px;display:flex;align-items:center;justify-content:center;">📞</div><div style="color:rgba(255,255,255,0.8);font-size:0.85rem;font-weight:600;">+977-14506775 / 15971817</div></div>
+            <div style="display:flex;align-items:center;gap:0.8rem;"><div style="width:32px;height:32px;background:rgba(225,29,72,0.2);border-radius:8px;display:flex;align-items:center;justify-content:center;">📍</div><div style="color:rgba(255,255,255,0.8);font-size:0.85rem;font-weight:600;">Birtamode-04, Jhapa Nepal</div></div>
+          </div>
+          <a href="enquiry.html" style="display:block;padding:0.9rem;background:linear-gradient(135deg,var(--sky),var(--sky-dark));color:white;text-align:center;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.95rem;">Book Free Consultation →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section">
+  <div class="container">
+    <div class="section-center">
+      <div class="section-tag">🔄 How It Works</div>
+      <h2 class="section-title">Simple 4-Step <span>Process</span></h2>
+    </div>
+    <div class="process-steps">
+      <div class="step"><div class="step-num">1</div><h4>Contact Us</h4><p>Call, WhatsApp or walk into our Birtamode office. Tell us your requirements.</p></div>
+      <div class="step"><div class="step-num">2</div><h4>Free Assessment</h4><p>We assess your needs — training, accounting, or consulting.</p></div>
+      <div class="step"><div class="step-num">3</div><h4>Custom Proposal</h4><p>Get a tailored plan with clear pricing, timeline, and scope.</p></div>
+      <div class="step"><div class="step-num">4</div><h4>Ongoing Support</h4><p>We deliver and stay with you — reports, updates, advisory.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-center">
+      <div class="section-tag">💬 What Clients Say</div>
+      <h2 class="section-title">Trusted by <span>Businesses</span> Across Jhapa</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"GMAS handled our entire bookkeeping and VAT compliance. Took a huge load off our management. Highly professional and affordable."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#0EA5E9,#0284C7)">R</div><div><div class="testi-name">Rajesh Sharma</div><div class="testi-role">Business Owner, Jhapa</div></div></div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"I took their Tally training and landed a job within 2 months. The instructor was excellent and very patient. Best investment I made."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#E11D48,#BE123C)">S</div><div><div class="testi-name">Sunita Rai</div><div class="testi-role">Accounting Student</div></div></div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Their tax compliance support saved us from a major IRD penalty. The team was responsive and got everything sorted fast."</p><div class="testi-author"><div class="testi-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">B</div><div><div class="testi-name">Bikash Limbu</div><div class="testi-role">NGO Director, Bhadrapur</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="container" style="position:relative;z-index:2;">
+    <h2>Ready to Grow Your Business <span style="color:var(--sky-light)">Financially?</span></h2>
+    <p>Get a free consultation with GMAS experts today. No obligations — just clarity and a clear path forward.</p>
+    <div class="cta-band-btns">
+      <a href="enquiry.html" class="btn-primary">📋 Get Free Consultation</a>
+      <a href="contact.html" class="btn-secondary">📞 Call Us Now</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="nav-logo" style="display:inline-flex;margin-bottom:1rem;">
+          <div class="logo-icon">G</div>
+          <div class="logo-text"><span class="logo-name">GMAS</span><span class="logo-tag">Management & Accounting</span></div>
+        </a>
+        <p class="footer-brand-desc">Global Management and Accounting Solutions. Training · Consulting · Outsourcing. Your trusted financial partner in Jhapa, Nepal.</p>
+      </div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html">Accounting Training</a></li><li><a href="services.html">Software Training</a></li><li><a href="services.html">Bookkeeping</a></li><li><a href="services.html">Auditing</a></li><li><a href="services.html">Tax Compliance</a></li><li><a href="services.html">Business Consulting</a></li></ul></div>
+      <div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About GMAS</a></li><li><a href="training.html">Training Programs</a></li><li><a href="enquiry.html">Get a Quote</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="admin.html">Admin Panel</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><a href="tel:9714506775">📞 +977-14506775</a></li><li><a href="tel:15971817">📱 15971817</a></li><li><a href="#">📍 Birtamode-04, Jhapa</a></li><li><a href="#">🏦 Near Siddhartha Bank</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 GMAS – All rights reserved.</span>
+      <div class="footer-badges"><span class="footer-badge">NFRS Compliant</span><span class="footer-badge">IRD Registered</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== ALL JS INLINE — no external files needed for file:// protocol =====
+
+// Config
+function getCfg(){return JSON.parse(localStorage.getItem('gmas_config')||'{}');}
+function applyConfig(){
+  var cfg=getCfg();
+  if(cfg.colorSky)document.documentElement.style.setProperty('--sky',cfg.colorSky);
+  if(cfg.colorRed)document.documentElement.style.setProperty('--red',cfg.colorRed);
+  if(cfg.siteName)document.querySelectorAll('.logo-name').forEach(function(e){e.textContent=cfg.siteName;});
+  if(cfg.siteTagline)document.querySelectorAll('.logo-tag').forEach(function(e){e.textContent=cfg.siteTagline;});
+  if(cfg.footerDesc)document.querySelectorAll('.footer-brand-desc').forEach(function(e){e.textContent=cfg.footerDesc;});
+  if(cfg.logoBase64){document.querySelectorAll('.logo-icon').forEach(function(el){el.innerHTML='<img src="'+cfg.logoBase64+'" style="width:32px;height:32px;object-fit:contain;position:relative;z-index:2;" />';});}
+}
+applyConfig();
+
+// Page covers from config
+function buildPageCover(key){
+  var cfg=getCfg();
+  var covers=(cfg.pageCovers)||JSON.parse(localStorage.getItem('gmas_page_covers')||'{}');
+  var cover=covers[key];
+  var bgEl=document.getElementById('coverBg');
+  var overlayEl=document.getElementById('coverOverlay');
+  if(!bgEl||!overlayEl)return;
+  var defaults={services:{bg:'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=80',overlay:'rgba(10,20,40,0.78)'},training:{bg:'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1600&q=80',overlay:'rgba(5,15,30,0.76)'},about:{bg:'https://images.unsplash.com/photo-1560472355-536de3962603?w=1600&q=80',overlay:'rgba(8,18,38,0.78)'},contact:{bg:'https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1600&q=80',overlay:'rgba(10,20,40,0.76)'},enquiry:{bg:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&q=80',overlay:'rgba(5,15,30,0.78)'}};
+  var d=(cover&&cover.bg)?cover:(defaults[key]||{bg:'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80',overlay:'rgba(10,20,40,0.78)'});
+  bgEl.style.backgroundImage="url('"+d.bg+"')";
+  overlayEl.style.background=d.overlay;
+}
+
+// Navbar scroll
+var nav=document.getElementById('mainNav');
+window.addEventListener('scroll',function(){
+  if(window.scrollY>80){nav.style.background='var(--dark)';nav.style.borderBottom='1px solid rgba(255,255,255,0.08)';nav.style.boxShadow='0 2px 30px rgba(0,0,0,0.4)';}
+  else{nav.style.background='transparent';nav.style.borderBottom='none';nav.style.boxShadow='none';}
+});
+
+// Mobile nav
+var toggle=document.getElementById('navToggle');
+var links=document.getElementById('navLinks');
+var overlay=document.getElementById('navOverlay');
+function closeNav(){links.style.cssText='';overlay.classList.remove('active');toggle.classList.remove('open');}
+toggle.addEventListener('click',function(){
+  var isOpen=links.style.display==='flex';
+  if(isOpen){closeNav();}
+  else{links.style.cssText='display:flex;position:fixed;top:0;right:0;bottom:0;width:290px;flex-direction:column;background:#0C1A2E;padding:100px 1.5rem 2rem;z-index:1099;box-shadow:-4px 0 40px rgba(0,0,0,0.6);list-style:none;gap:0.3rem;';overlay.classList.add('active');toggle.classList.add('open');}
+});
+overlay.addEventListener('click',closeNav);
+
+// Counter animation
+function animateCounters(){
+  document.querySelectorAll('.count-anim').forEach(function(el){
+    if(el.dataset.animated)return;el.dataset.animated='1';
+    var target=parseInt(el.dataset.target);if(!target)return;
+    var start=0;var step=target/(2000/16);
+    var t=setInterval(function(){start+=step;if(start>=target){el.textContent=target.toLocaleString();clearInterval(t);}else{el.textContent=Math.floor(start).toLocaleString();}},16);
+  });
+}
+var sb=document.getElementById('statsBand');
+if(sb){var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){animateCounters();obs.disconnect();}});},{threshold:0.3});obs.observe(sb);}
+
+// ===== SLIDES =====
+var DEFAULT_SLIDES=[
+  {title:'Your Trusted <span class="hero-highlight">Accounting Partner</span> in Jhapa',desc:'Training · Consulting · Outsourcing — Professional accounting, auditing, tax compliance, and business advisory from Birtamode, Jhapa. We make finance simple.',badge:'#1 Accounting Firm in Jhapa',btn1:'Get Free Consultation',btn2:'Explore Services →',bg:'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1600&q=80',overlay:'rgba(5,15,35,0.80)'},
+  {title:'Accounting <span class="hero-highlight">Training Classes</span> Starting Soon',desc:'Learn practical accounting, Tally ERP, and QuickBooks with certified trainers. Get job-ready in 30–90 days. Morning & evening batches available.',badge:'📚 New Batch Enrolling Now',btn1:'Enroll in Training',btn2:'View Courses →',bg:'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1600&q=80',overlay:'rgba(5,15,30,0.82)'},
+  {title:'Tax & VAT Compliance <span class="hero-highlight">Done Right</span>',desc:'Never miss an IRD deadline again. Our expert team handles your complete tax compliance — VAT returns, TDS, income tax, and more. On time, every time.',badge:'🧾 IRD Certified Experts',btn1:'Get Tax Help',btn2:'Learn More →',bg:'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1600&q=80',overlay:'rgba(10,5,30,0.80)'},
+  {title:'Business <span class="hero-highlight">Auditing</span> & Assurance Services',desc:'Statutory and internal audit services for companies, NGOs, and cooperatives. IRD-compliant reports prepared by registered auditors based in Jhapa.',badge:'🔍 Certified Auditors',btn1:'Request Audit',btn2:'View Services →',bg:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&q=80',overlay:'rgba(8,18,40,0.80)'},
+];
+var DEFAULT_TICKER=[
+  {icon:'📚',text:'Accounting Training Classes — New Batch Starting'},
+  {icon:'💻',text:'Tally ERP & QuickBooks Training'},
+  {icon:'📒',text:'Bookkeeping & Accounting Outsourcing'},
+  {icon:'🔍',text:'Auditing & Assurance Services'},
+  {icon:'🧾',text:'VAT & Tax Compliance — IRD Experts'},
+  {icon:'🤝',text:'Business Consulting & Advisory'},
+  {icon:'📍',text:'Birtamode-04, Jhapa — Walk In Anytime'},
+  {icon:'⭐',text:'Trusted by 500+ Clients Across Jhapa'},
+];
+
+function getHomeConfig(){
+  try{var s=localStorage.getItem('gmas_home_config');if(s){var p=JSON.parse(s);return{slides:p.slides||DEFAULT_SLIDES,ticker:p.ticker||DEFAULT_TICKER};}}catch(e){}
+  return{slides:DEFAULT_SLIDES,ticker:DEFAULT_TICKER};
+}
+
+var currentSlide=0,slideTimer=null,slides=[];
+
+function buildSlider(){
+  var cfg=getHomeConfig();slides=cfg.slides;
+  var wrapper=document.getElementById('slidesWrapper');
+  var dotsEl=document.getElementById('slideDots');
+  wrapper.innerHTML='';dotsEl.innerHTML='';
+  slides.forEach(function(s,i){
+    var slide=document.createElement('div');slide.className='slide'+(i===0?' active':'');
+    var bg=document.createElement('div');bg.className='slide-bg';bg.style.backgroundImage="url('"+s.bg+"')";
+    var ov=document.createElement('div');ov.className='slide-overlay';ov.style.background=s.overlay||'rgba(5,15,35,0.8)';
+    slide.appendChild(bg);slide.appendChild(ov);wrapper.appendChild(slide);
+    var dot=document.createElement('button');dot.className='slide-dot'+(i===0?' active':'');
+    (function(idx){dot.onclick=function(){goToSlide(idx);};})(i);
+    dotsEl.appendChild(dot);
+  });
+  updateSlideContent(0);startAutoPlay();
+}
+
+function updateSlideContent(index){
+  var s=slides[index];if(!s)return;
+  var titleEl=document.getElementById('heroTitle');
+  var descEl=document.getElementById('heroDesc');
+  var badgeEl=document.getElementById('heroBadgeText');
+  var btn1=document.getElementById('heroBtn1');
+  var btn2=document.getElementById('heroBtn2');
+  if(titleEl){titleEl.style.opacity='0';titleEl.style.transform='translateY(16px)';setTimeout(function(){titleEl.innerHTML=s.title||'';titleEl.style.transition='opacity 0.5s,transform 0.5s';titleEl.style.opacity='1';titleEl.style.transform='translateY(0)';},200);}
+  if(descEl){descEl.style.opacity='0';setTimeout(function(){descEl.textContent=s.desc||'';descEl.style.transition='opacity 0.5s 0.1s';descEl.style.opacity='1';},300);}
+  if(badgeEl)badgeEl.textContent=s.badge||'';
+  if(btn1)btn1.innerHTML='📋 '+(s.btn1||'Get Free Consultation');
+  if(btn2)btn2.textContent=s.btn2||'Explore Services →';
+}
+
+function goToSlide(index){
+  var allSlides=document.querySelectorAll('.slide');
+  var allDots=document.querySelectorAll('.slide-dot');
+  allSlides[currentSlide]&&allSlides[currentSlide].classList.remove('active');
+  allDots[currentSlide]&&allDots[currentSlide].classList.remove('active');
+  currentSlide=(index+slides.length)%slides.length;
+  allSlides[currentSlide]&&allSlides[currentSlide].classList.add('active');
+  allDots[currentSlide]&&allDots[currentSlide].classList.add('active');
+  var bg=allSlides[currentSlide]&&allSlides[currentSlide].querySelector('.slide-bg');
+  if(bg){bg.style.animation='none';void bg.offsetWidth;bg.style.animation='';}
+  updateSlideContent(currentSlide);resetAutoPlay();
+}
+function startAutoPlay(){slideTimer=setInterval(function(){goToSlide(currentSlide+1);},5500);}
+function resetAutoPlay(){clearInterval(slideTimer);startAutoPlay();}
+
+document.getElementById('slidePrev').addEventListener('click',function(){goToSlide(currentSlide-1);});
+document.getElementById('slideNext').addEventListener('click',function(){goToSlide(currentSlide+1);});
+var touchStartX=0;
+document.getElementById('heroSlider').addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;});
+document.getElementById('heroSlider').addEventListener('touchend',function(e){var diff=touchStartX-e.changedTouches[0].clientX;if(Math.abs(diff)>50)goToSlide(diff>0?currentSlide+1:currentSlide-1);});
+
+// Ticker
+function buildTicker(){
+  var cfg=getHomeConfig();var items=cfg.ticker;
+  var track=document.getElementById('tickerTrack');
+  var all=items.concat(items);
+  track.innerHTML=all.map(function(item){return'<span class="ticker-item"><span class="tick-dot"></span><span class="tick-icon">'+item.icon+'</span>'+item.text+'</span>';}).join('');
+}
+
+buildSlider();
+buildTicker();
+</script>
+</body>
+</html>
